@@ -1,20 +1,8 @@
 import "./global.css";
 import { Toaster } from "sonner";
-import localFont from "next/font/local";
 import { AOS } from "./components/global";
-import { Space_Grotesk, Inter } from "next/font/google";
 import type { Metadata, Viewport } from "next";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { Space_Grotesk, Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -104,7 +92,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} ${geistMono.variable} antialiased`}
+        className={`${spaceGrotesk.className} ${inter.variable} antialiased`}
       >
         <Toaster richColors />
         <AOS />
