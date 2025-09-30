@@ -1,438 +1,366 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Button,
-  Card,
-  Image,
-  Input,
-  Modal,
-  Otp,
-  Select,
-  Skeleton,
-  Tabs,
-  TextArea,
-  Toggle,
-} from "./components/ui";
+import { Button, Card } from "./components/ui";
 import { motion } from "framer-motion";
-import { EyeIcon } from "./components/svgs";
-import { toast } from "sonner";
-import { Animation, Glow, Loader } from "./components/global";
+import { Animation } from "./components/global";
+import {
+  Target,
+  Users,
+  Bell,
+  TrendingUp,
+  Heart,
+  Zap,
+  ArrowRight,
+  CheckCircle,
+  Star,
+  Sparkles,
+} from "lucide-react";
 
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [toggleState, setToggleState] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [textAreaValue, setTextAreaValue] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
 
-  const tabs = [
-    { label: "Overview", value: "overview" },
-    { label: "Components", value: "components" },
-    { label: "Settings", value: "settings" },
+  const features = [
+    {
+      icon: Target,
+      title: "Goal Tracking",
+      description:
+        "Create and manage your goals with beautiful progress visualization",
+      color: "from-ember-400 to-ember-600",
+    },
+    {
+      icon: Users,
+      title: "Social Accountability",
+      description:
+        "Share goals with friends and get support from your community",
+      color: "from-ocean-400 to-ocean-600",
+    },
+    {
+      icon: Bell,
+      title: "Smart Reminders",
+      description:
+        "Send and receive gentle nudges to stay on track with your goals",
+      color: "from-sunshine-400 to-sunshine-600",
+    },
+    {
+      icon: TrendingUp,
+      title: "Progress Analytics",
+      description:
+        "Track your journey with detailed insights and achievement streaks",
+      color: "from-success-400 to-success-600",
+    },
   ];
 
-  const selectOptions = [
-    { label: "Option 1", value: "1" },
-    { label: "Option 2", value: "2" },
-    { label: "Option 3", value: "3" },
+  const stats = [
+    { number: "10K+", label: "Goals Achieved" },
+    { number: "5K+", label: "Active Users" },
+    { number: "95%", label: "Success Rate" },
+    { number: "24/7", label: "Support" },
   ];
 
   return (
     <Animation>
-      <div className="min-h-screen bg-[#0f0f0f] p-8">
-        <div className="max-w-6xl mx-auto space-y-12">
-          {/* Header */}
-
-          <div className="text-center space-y-6 mb-16">
+      <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 overflow-hidden">
+        {/* Hero Section */}
+        <div className="relative min-h-screen flex items-center justify-center px-4">
+          {/* Background Elements */}
+          <div className="absolute inset-0 overflow-hidden">
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-5xl font-bold text-white font-geistSans">
-                UI Components
-              </h1>
-              <p className="text-[#FFFFFF80] mt-4 max-w-2xl mx-auto">
-                A modern, accessible, and fully-featured component library built
-                with Next.js, Tailwind CSS, and TypeScript
-              </p>
-            </motion.div>
-
-            <div className="flex gap-4 justify-center">
-              <Button
-                variant="primary"
-                onClick={() => toast.success("Copied to clipboard!")}
-              >
-                Get Started
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  window.open(
-                    "https://github.com/victorola-coder/next-template"
-                  )
-                }
-              >
-                View on GitHub
-              </Button>
-            </div>
+              className="absolute top-1/4 left-1/4 w-96 h-96 bg-ember-500/10 rounded-full blur-3xl"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.div
+              className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-ocean-500/10 rounded-full blur-3xl"
+              animate={{
+                scale: [1.2, 1, 1.2],
+                opacity: [0.6, 0.3, 0.6],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
           </div>
 
-          {/* Tabs Navigation */}
-          <Tabs
-            tabs={tabs}
-            defaultValue="components"
-            className="justify-center"
-          />
-
-          {/* Components Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Buttons Section */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">Buttons</h2>
-              <div className="flex flex-row flex-wrap gap-4">
-                <Button variant="default">Default Button</Button>
-                <Button variant="primary">Primary Button</Button>
-                <Button variant="secondary">Secondary Button</Button>
-                <Button variant="danger">Danger Button</Button>
-                <Button variant="google">Google Button</Button>
-                <Button loading>Loading Button</Button>
-              </div>
-            </Glow>
-            {/* Loading States */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">Loaders</h2>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="flex flex-col items-center gap-2">
-                  <Loader size="small" />
-                  <span className="text-sm text-[#FFFFFF80]">Small</span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <Loader size="medium" />
-                  <span className="text-sm text-[#FFFFFF80]">Medium</span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <Loader size="large" />
-                  <span className="text-sm text-[#FFFFFF80]">Large</span>
-                </div>
-              </div>
-            </Glow>
-
-            {/* Icons & SVGs */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Icons & SVGs
-              </h2>
-              <div className="grid grid-cols-4 gap-4">
-                <div className="flex flex-col items-center gap-2">
-                  <EyeIcon className="w-6 h-6" fill="white" />
-                  <span className="text-sm text-[#FFFFFF80]">Eye</span>
-                </div>
-                {/* Add more icons here */}
-              </div>
-            </Glow>
-            {/* Form Inputs Section */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">Inputs</h2>
-              <Input
-                placeholder="Regular Input"
-                value={inputValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setInputValue(e.target.value)
-                }
-              />
-              <Input
-                type="password"
-                placeholder="Password Input"
-                value={inputValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setInputValue(e.target.value)
-                }
-              />
-              <TextArea
-                name="textarea"
-                value={textAreaValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setTextAreaValue(e.target.value)
-                }
-                placeholder="Text Area Input"
-              />
-            </Glow>
-
-            {/* Form Validation */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Form Validation
-              </h2>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  toast.success("Form submitted!");
-                }}
-                className="space-y-4"
+          <div className="relative z-10 max-w-6xl mx-auto text-center">
+            {/* Main Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="mb-8"
+            >
+              <motion.div
+                className="inline-flex items-center gap-2 px-4 py-2 bg-ember-500/10 border border-ember-500/20 rounded-full text-ember-400 text-sm font-medium mb-6"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
               >
-                <Input
-                  placeholder="Email"
-                  type="email"
-                  error="Please enter a valid email"
-                />
-                <Input
-                  placeholder="Password"
-                  type="password"
-                  error="Password is required"
-                />
-                <Button type="submit" className="w-full">
-                  Submit
-                </Button>
-              </form>
-            </Glow>
+                <Sparkles className="w-4 h-4" />
+                Where Goals Become Commitments
+              </motion.div>
 
-            {/* Toggle & Select Section */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Interactive Components
-              </h2>
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-white">Toggle Component</span>
-                  <Toggle checked={toggleState} onChange={setToggleState} />
-                </div>
-                <Select
-                  options={selectOptions}
-                  placeholder="Select an option"
-                  onChange={(value) => console.log(value)}
-                />
-              </div>
-            </Glow>
-            {/* Animations */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Animations
-              </h2>
-              <div className="space-y-4">
-                <motion.div
+              <h1 className="text-6xl md:text-8xl font-heading font-bold text-white mb-6 leading-tight">
+                <motion.span
+                  className="bg-gradient-to-r from-ember-400 via-ember-500 to-ember-600 bg-clip-text text-transparent"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                >
+                  Emberpad
+                </motion.span>
+              </h1>
+
+              <motion.p
+                className="text-xl md:text-2xl text-dark-300 max-w-3xl mx-auto leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              >
+                Transform your personal goals into social commitments. Track
+                progress, get reminders from friends, and achieve more together.
+              </motion.p>
+            </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+            >
+              <Button
+                variant="primary"
+                size="lg"
+                className="group relative overflow-hidden"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <motion.span
+                  className="flex items-center gap-2"
+                  animate={{ x: isHovered ? 5 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Get Started Free
+                  <ArrowRight className="w-5 h-5" />
+                </motion.span>
+              </Button>
+
+              <Button variant="secondary" size="lg" className="group">
+                <motion.span
+                  className="flex items-center gap-2"
                   whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#283142] p-4 rounded-lg text-white text-center"
                 >
-                  Hover & Tap Animation
-                </motion.div>
+                  Watch Demo
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  >
+                    <Heart className="w-5 h-5" />
+                  </motion.div>
+                </motion.span>
+              </Button>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.8 }}
+            >
+              {stats.map((stat, index) => (
                 <motion.div
-                  animate={{
-                    y: [0, -10, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                  className="bg-[#283142] p-4 rounded-lg text-white text-center"
+                  key={stat.label}
+                  className="text-center"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1 + index * 0.1, duration: 0.6 }}
                 >
-                  Floating Animation
+                  <div className="text-3xl md:text-4xl font-heading font-bold text-white mb-2">
+                    {stat.number}
+                  </div>
+                  <div className="text-dark-400 text-sm font-medium">
+                    {stat.label}
+                  </div>
                 </motion.div>
-              </div>
-            </Glow>
-            {/* Color Palette */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Color Palette
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="h-12 rounded-lg bg-primary" />
-                  <span className="text-sm text-[#FFFFFF80]">Primary</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-12 rounded-lg bg-[#283142]" />
-                  <span className="text-sm text-[#FFFFFF80]">Secondary</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-12 rounded-lg bg-[#6366F1]" />
-                  <span className="text-sm text-[#FFFFFF80]">Accent</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-12 rounded-lg bg-[#DC2626]" />
-                  <span className="text-sm text-[#FFFFFF80]">Danger</span>
-                </div>
-              </div>
-            </Glow>
-
-            {/* Card & Image Section */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Display Components
-              </h2>
-              <Card>
-                <div className="bg-[#283142] p-4 rounded-lg">
-                  <Image
-                    src="/images/logo.svg"
-                    alt="Placeholder"
-                    width={300}
-                    height={200}
-                    className="rounded-lg"
-                  />
-                </div>
-              </Card>
-            </Glow>
-
-            {/* Loading States Section */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Loading States
-              </h2>
-              <div className="space-y-4">
-                <Skeleton className="h-12 w-full" />
-                <Skeleton className="h-12 w-3/4" />
-                <Skeleton className="h-12 w-1/2" />
-              </div>
-            </Glow>
-
-            {/* Modal & OTP Section */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Advanced Components
-              </h2>
-              <div className="space-y-4">
-                <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
-                <div className="mt-8">
-                  <h3 className="text-white mb-4">OTP Input</h3>
-                  <Otp />
-                </div>
-              </div>
-            </Glow>
-
-            {/* Toast Notifications */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Toast Notifications
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
-                <Button
-                  variant="default"
-                  onClick={() => toast.success("Success message")}
-                >
-                  Success Toast
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => toast.error("Error message")}
-                >
-                  Error Toast
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => toast.info("Info message")}
-                >
-                  Info Toast
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => toast.warning("Warning message")}
-                >
-                  Warning Toast
-                </Button>
-              </div>
-            </Glow>
-
-            {/* Typography */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Typography
-              </h2>
-              <div className="space-y-6">
-                <div>
-                  <h1 className="text-4xl font-geistSans font-bold text-white">
-                    Heading 1
-                  </h1>
-                  <p className="text-[#FFFFFF80] text-sm">
-                    Font: Geist Sans Bold - 36px
-                  </p>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-geistSans font-semibold text-white">
-                    Heading 2
-                  </h2>
-                  <p className="text-[#FFFFFF80] text-sm">
-                    Font: Geist Sans Semibold - 30px
-                  </p>
-                </div>
-                <div>
-                  <p className="text-base font-geistSans text-white">
-                    Regular paragraph text with Geist Sans
-                  </p>
-                  <p className="text-[#FFFFFF80] text-sm">
-                    Font: Geist Sans Regular - 16px
-                  </p>
-                </div>
-                <div>
-                  <p className="font-geistMono text-white">
-                    Monospace text with Geist Mono
-                  </p>
-                  <p className="text-[#FFFFFF80] text-sm">
-                    Font: Geist Mono - 16px
-                  </p>
-                </div>
-              </div>
-            </Glow>
-
-            {/* Gradients */}
-            <Glow className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Gradients
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="h-20 rounded-lg bg-gradient-to-r from-primary to-[#6366F1]" />
-                  <span className="text-sm text-[#FFFFFF80]">
-                    Primary Gradient
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-20 rounded-lg bg-gradient-to-r from-[#DC2626] to-[#EA580C]" />
-                  <span className="text-sm text-[#FFFFFF80]">
-                    Danger Gradient
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-20 rounded-lg bg-gradient-to-r from-[#283142] to-[#1A202B]" />
-                  <span className="text-sm text-[#FFFFFF80]">
-                    Background Gradient
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-20 rounded-lg bg-gradient-to-r from-[#059669] to-[#10B981]" />
-                  <span className="text-sm text-[#FFFFFF80]">
-                    Success Gradient
-                  </span>
-                </div>
-              </div>
-            </Glow>
+              ))}
+            </motion.div>
           </div>
         </div>
 
-        {/* Modal */}
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title="Modal Example"
-        >
-          <div className="space-y-4">
-            <p className="text-white">
-              This is an example modal that showcases the Modal component.
-            </p>
-            <Button
-              variant="primary"
-              onClick={() => setIsModalOpen(false)}
-              className="w-full"
+        {/* Features Section */}
+        <div className="py-24 px-4">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
             >
-              Close Modal
-            </Button>
+              <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
+                Why Choose <span className="text-ember-400">Emberpad</span>?
+              </h2>
+              <p className="text-xl text-dark-300 max-w-2xl mx-auto">
+                Built for the modern goal-setter who believes in the power of
+                community accountability
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="group"
+                >
+                  <div className="relative p-8 h-full bg-gradient-to-br from-dark-800/50 to-dark-900/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl hover:border-ember-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-ember-500/10">
+                    {/* Subtle background glow effect */}
+                    <div
+                      className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                    />
+
+                    <motion.div
+                      className={`relative w-14 h-14 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                      whileHover={{ rotate: 5 }}
+                    >
+                      <feature.icon className="w-7 h-7 text-white" />
+                    </motion.div>
+
+                    <h3 className="text-xl font-heading font-semibold text-white mb-4 group-hover:text-ember-400 transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+
+                    <p className="text-dark-300 leading-relaxed group-hover:text-dark-200 transition-colors duration-300">
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </Modal>
+        </div>
+
+        {/* CTA Section */}
+        <motion.div
+          className="py-24 px-4"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="relative p-12 bg-gradient-to-br from-dark-800/60 to-dark-900/60 backdrop-blur-sm border border-dark-700/50 rounded-3xl hover:border-ember-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-ember-500/20">
+              {/* Animated background gradient */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-ember-500/5 via-ocean-500/5 to-sunshine-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+
+              <motion.div
+                className="relative mb-8"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
+                  Ready to Transform Your Goals?
+                </h2>
+                <p className="text-xl text-dark-300 mb-8 max-w-2xl mx-auto">
+                  Join thousands of people who are already achieving more with
+                  the power of social accountability
+                </p>
+              </motion.div>
+
+              <motion.div
+                className="relative flex flex-col sm:flex-row gap-4 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="group relative overflow-hidden"
+                >
+                  <motion.span
+                    className="flex items-center gap-2 relative z-10"
+                    whileHover={{ x: 5 }}
+                  >
+                    Start Your Journey
+                    <CheckCircle className="w-5 h-5" />
+                  </motion.span>
+                </Button>
+
+                <Button variant="secondary" size="lg" className="group">
+                  <motion.span
+                    className="flex items-center gap-2"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    Learn More
+                    <Zap className="w-5 h-5" />
+                  </motion.span>
+                </Button>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Footer */}
+        <footer className="py-12 px-4 border-t border-dark-700">
+          <div className="max-w-6xl mx-auto text-center">
+            <motion.div
+              className="flex items-center justify-center gap-2 mb-4"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <Star className="w-5 h-5 text-ember-400" />
+              <span className="text-2xl font-heading font-bold text-white">
+                Emberpad
+              </span>
+            </motion.div>
+
+            <motion.p
+              className="text-dark-400 mb-4"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              Built with Next.js, Tailwind CSS, and TypeScript
+            </motion.p>
+
+            <motion.p
+              className="text-dark-500 text-sm"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              © {new Date().getFullYear()} Emberpad. All rights reserved.
+            </motion.p>
+          </div>
+        </footer>
       </div>
-      <footer className="mt-16 text-center text-[#FFFFFF80]">
-        <p>Built with Next.js, Tailwind CSS, and TypeScript</p>
-        <p className="mt-2">© {new Date().getFullYear()} Victorola</p>
-      </footer>
     </Animation>
   );
 }
