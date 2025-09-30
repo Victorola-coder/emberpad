@@ -46,7 +46,7 @@ export default function Select({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={clsx(
-          "w-full  px-4 py-3 rounded-[12px] border border-[#FFFFFF29] text-white text-[12px] md:text-base font-medium font-aloeMed gap-2 text-left flex items-center justify-between",
+          "w-full px-4 py-3 rounded-[12px] border border-dark-600 bg-dark-800 text-white text-[12px] md:text-base font-medium font-geistSans gap-2 text-left flex items-center justify-between hover:border-ember-500 focus:border-ember-500 focus:ring-2 focus:ring-ember-500",
           className
         )}
       >
@@ -69,14 +69,16 @@ export default function Select({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-2 bg-[#283142] rounded-[12px] shadow-lg">
+        <div className="absolute z-10 w-full mt-2 bg-dark-800 border border-dark-600 rounded-[12px] shadow-xl">
           {options.map((option) => (
             <button
               key={option.value}
               onClick={() => handleSelect(option.value)}
               className={clsx(
-                "w-full px-4 py-3 text-[12px] whitespace-nowrap md:text-base font-medium font-aloeMed text-left hover:bg-[#374151] transition-colors",
-                option.value === selected ? "text-white" : "text-[#FFFFFF80]",
+                "w-full px-4 py-3 text-[12px] whitespace-nowrap md:text-base font-medium font-geistSans text-left hover:bg-dark-700 transition-colors",
+                option.value === selected
+                  ? "text-ember-400 bg-ember-500/10"
+                  : "text-dark-300",
                 "first:rounded-t-[12px] last:rounded-b-[12px]"
               )}
             >

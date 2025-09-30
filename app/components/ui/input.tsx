@@ -24,8 +24,9 @@ export default function Input({
             {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
             placeholder={placeholder}
             className={clsx(
-              "w-full bg-[#283142] p-4 rounded-[12px] text-white placeholder:text-[#FFFFFF80] font-aloe text-base leading-[22.4px] focus:outline-none focus:ring-0",
-              error && "border-1 border-red-500"
+              "w-full bg-dark-800 border border-dark-600 p-4 rounded-[12px] text-white placeholder:text-dark-400 font-geistSans text-base leading-[22.4px] focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500",
+              error &&
+                "border-danger-500 focus:ring-danger-500 focus:border-danger-500"
             )}
           />
         ) : (
@@ -35,8 +36,9 @@ export default function Input({
             placeholder={placeholder}
             autoComplete="off"
             className={clsx(
-              "w-full bg-[#283142] h-full p-4 rounded-[12px] text-white placeholder:text-[#FFFFFF80] font-aloe text-base leading-[22.4px] focus:outline-none focus:ring-0",
-              error && "border-1 border-red-500",
+              "w-full bg-dark-800 border border-dark-600 h-full p-4 rounded-[12px] text-white placeholder:text-dark-400 font-geistSans text-base leading-[22.4px] focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500",
+              error &&
+                "border-danger-500 focus:ring-danger-500 focus:border-danger-500",
               type === "password" && "pr-12"
             )}
           />
@@ -44,14 +46,14 @@ export default function Input({
         {type === "password" && (
           <span
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#FFFFFF80] hover:text-white transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400 hover:text-white transition-colors"
           >
-            <EyeIcon fill={showPassword ? "white" : "#FFFFFF80"} />
+            <EyeIcon fill={showPassword ? "white" : "#94A3B8"} />
           </span>
         )}
       </div>
       {error && (
-        <p className="text-red-500 font-aloe text-xs leading-[22.4px] mt-1">
+        <p className="text-danger-500 font-geistSans text-xs leading-[22.4px] mt-1">
           {error}
         </p>
       )}
