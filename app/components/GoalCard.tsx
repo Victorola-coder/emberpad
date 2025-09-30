@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Card } from "./ui";
+import { Card, Button } from "./ui";
+import ProgressUpdateModal from "./ProgressUpdateModal";
 import {
   Target,
   Calendar,
@@ -33,6 +35,7 @@ interface GoalCardProps {
   onUpdateProgress?: (goalId: string, progress: number) => void;
   onSendReminder?: (goalId: string, userId: string) => void;
   showActions?: boolean;
+  isOwnGoal?: boolean;
 }
 
 export default function GoalCard({
@@ -40,7 +43,16 @@ export default function GoalCard({
   onUpdateProgress,
   onSendReminder,
   showActions = true,
+  isOwnGoal = false,
 }: GoalCardProps) {
+  const [showProgressModal, setShowProgressModal] = useState(false);
+
+  const handleProgressUpdate = async (progress: number) => {
+    if (onUpdateProgress) {
+      await onUpdateProgress(goal.id, progress);
+    }
+  };
+
   const getCategoryColor = (category: string) => {
     const colors = {
       health: "from-success-400 to-success-600",
@@ -130,7 +142,11 @@ export default function GoalCard({
               {goal.progress}%
             </span>
           </div>
-          <div className="w-full bg-dark-700 rounded-full h-2">
+          <div
+            className="w-full bg-dark-700 rounded-full h-2 cursor-pointer hover:bg-dark-600 transition-colors"
+            onClick={() => isOwnGoal && setShowProgressModal(true)}
+            title={isOwnGoal ? "Click to update progress" : ""}
+          >
             <motion.div
               className={`h-2 rounded-full bg-gradient-to-r ${getCategoryColor(
                 goal.category
@@ -140,6 +156,11 @@ export default function GoalCard({
               transition={{ duration: 0.8, ease: "easeOut" }}
             />
           </div>
+          {isOwnGoal && (
+            <p className="text-xs text-dark-400 mt-1">
+              Click progress bar to update
+            </p>
+          )}
         </div>
 
         {/* Status and Date */}
@@ -182,6 +203,15 @@ export default function GoalCard({
           </div>
         )}
       </Card>
+
+      {/* Progress Update Modal */}
+      <ProgressUpdateModal
+        isOpen={showProgressModal}
+        onClose={() => setShowProgressModal(false)}
+        goalTitle={goal.title}
+        currentProgress={goal.progress}
+        onUpdate={handleProgressUpdate}
+      />
     </motion.div>
   );
 }

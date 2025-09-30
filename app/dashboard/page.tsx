@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Button, Card } from "../components/ui";
 import GoalCard from "../components/GoalCard";
 import CreateGoalModal from "../components/CreateGoalModal";
+import UserSearchModal from "../components/UserSearchModal";
+import SocialFeed from "../components/SocialFeed";
 import { useAuth } from "../contexts/AuthContext";
 import {
   Plus,
@@ -16,6 +18,7 @@ import {
   Filter,
   Grid,
   List,
+  Home,
 } from "lucide-react";
 
 interface Goal {
@@ -42,6 +45,10 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [filter, setFilter] = useState("all");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isUserSearchOpen, setIsUserSearchOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"my-goals" | "social-feed">(
+    "my-goals"
+  );
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -51,58 +58,58 @@ export default function Dashboard() {
     }
   }, [user]);
 
-  // Mock data for now - replace with API calls
+  // Fetch user's goals from API
   useEffect(() => {
     if (!user) return;
 
-    // Simulate API call
-    setTimeout(() => {
-      setGoals([
-        {
-          id: "1",
-          title: "Learn React",
-          description: "Master React development and build amazing apps",
-          category: "learning",
-          targetDate: "2024-03-15",
-          privacy: "public",
-          status: "active",
-          progress: 65,
-          user: { id: "1", name: "John Doe", avatar: "" },
-          createdAt: "2024-01-15",
-        },
-        {
-          id: "2",
-          title: "Run 5K",
-          description: "Complete a 5K run without stopping",
-          category: "health",
-          targetDate: "2024-02-28",
-          privacy: "public",
-          status: "active",
-          progress: 40,
-          user: { id: "2", name: "Jane Smith", avatar: "" },
-          createdAt: "2024-01-10",
-        },
-        {
-          id: "3",
-          title: "Read 12 Books",
-          description: "Read one book per month this year",
-          category: "personal",
-          targetDate: "2024-12-31",
-          privacy: "friends",
-          status: "active",
-          progress: 25,
-          user: { id: "3", name: "Mike Johnson", avatar: "" },
-          createdAt: "2024-01-05",
-        },
-      ]);
-      setLoading(false);
-    }, 1000);
+    const fetchGoals = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/goals", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setGoals(data);
+        } else {
+          console.error("Failed to fetch goals");
+        }
+      } catch (error) {
+        console.error("Error fetching goals:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGoals();
   }, [user]);
 
-  const handleUpdateProgress = (goalId: string, progress: number) => {
-    setGoals((prev) =>
-      prev.map((goal) => (goal.id === goalId ? { ...goal, progress } : goal))
-    );
+  const handleUpdateProgress = async (goalId: string, progress: number) => {
+    try {
+      const response = await fetch(`/api/goals/${goalId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ progress }),
+      });
+
+      if (response.ok) {
+        setGoals((prev) =>
+          prev.map((goal) =>
+            goal.id === goalId ? { ...goal, progress } : goal
+          )
+        );
+      } else {
+        console.error("Failed to update progress");
+      }
+    } catch (error) {
+      console.error("Error updating progress:", error);
+    }
   };
 
   const handleSendReminder = (goalId: string, userId: string) => {
@@ -110,20 +117,27 @@ export default function Dashboard() {
     // Implement reminder logic
   };
 
-  const handleCreateGoal = (goalData: any) => {
-    const newGoal: Goal = {
-      id: Date.now().toString(),
-      title: goalData.title,
-      description: goalData.description,
-      category: goalData.category,
-      targetDate: goalData.targetDate,
-      privacy: goalData.privacy,
-      status: "active",
-      progress: 0,
-      user: { id: "1", name: "You", avatar: "" },
-      createdAt: new Date().toISOString(),
-    };
-    setGoals((prev) => [newGoal, ...prev]);
+  const handleCreateGoal = async (goalData: any) => {
+    try {
+      const response = await fetch("/api/goals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(goalData),
+      });
+
+      if (response.ok) {
+        const newGoal = await response.json();
+        setGoals((prev) => [newGoal, ...prev]);
+        setIsCreateModalOpen(false);
+      } else {
+        console.error("Failed to create goal");
+      }
+    } catch (error) {
+      console.error("Error creating goal:", error);
+    }
   };
 
   const filteredGoals = goals.filter((goal) => {
@@ -168,15 +182,25 @@ export default function Dashboard() {
               </p>
             </div>
 
-            <Button
-              variant="primary"
-              size="lg"
-              className="group"
-              onClick={() => setIsCreateModalOpen(true)}
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              Create Goal
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => setIsUserSearchOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <Search className="w-4 h-4" />
+                Find People
+              </Button>
+              <Button
+                variant="primary"
+                size="lg"
+                className="group"
+                onClick={() => setIsCreateModalOpen(true)}
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Create Goal
+              </Button>
+            </div>
           </div>
 
           {/* Stats Cards */}
@@ -243,6 +267,34 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
+        {/* Tab Navigation */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-1 bg-dark-800 p-1 rounded-xl w-fit">
+            {[
+              { id: "my-goals", label: "My Goals", icon: Target },
+              { id: "social-feed", label: "Social Feed", icon: Users },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                  activeTab === tab.id
+                    ? "bg-ember-500 text-white"
+                    : "text-dark-400 hover:text-white hover:bg-dark-700"
+                }`}
+              >
+                <tab.icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Filters and Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -298,32 +350,62 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Goals Grid */}
+        {/* Content based on active tab */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className={
-            viewMode === "grid"
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-              : "space-y-4"
-          }
         >
-          {filteredGoals.map((goal, index) => (
-            <motion.div
-              key={goal.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <GoalCard
-                goal={goal}
-                onUpdateProgress={handleUpdateProgress}
-                onSendReminder={handleSendReminder}
-                showActions={true}
-              />
-            </motion.div>
-          ))}
+          {activeTab === "my-goals" ? (
+            /* My Goals Content */
+            filteredGoals.length > 0 ? (
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    : "space-y-4"
+                }
+              >
+                {filteredGoals.map((goal, index) => (
+                  <motion.div
+                    key={goal.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <GoalCard
+                      goal={goal}
+                      onUpdateProgress={handleUpdateProgress}
+                      onSendReminder={handleSendReminder}
+                      showActions={true}
+                      isOwnGoal={goal.user.id === user?.id}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <Target className="w-16 h-16 text-dark-400 mx-auto mb-4" />
+                <h3 className="text-xl font-heading font-semibold text-white mb-2">
+                  No goals found
+                </h3>
+                <p className="text-dark-400 mb-6">
+                  {filter === "all"
+                    ? "Create your first goal to get started"
+                    : `No goals found in the ${filter} category`}
+                </p>
+                <Button
+                  variant="primary"
+                  onClick={() => setIsCreateModalOpen(true)}
+                >
+                  Create Goal
+                </Button>
+              </div>
+            )
+          ) : (
+            /* Social Feed Content */
+            <SocialFeed userId={user?.id || ""} />
+          )}
         </motion.div>
 
         {filteredGoals.length === 0 && (
@@ -358,6 +440,12 @@ export default function Dashboard() {
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSubmit={handleCreateGoal}
+        />
+
+        {/* User Search Modal */}
+        <UserSearchModal
+          isOpen={isUserSearchOpen}
+          onClose={() => setIsUserSearchOpen(false)}
         />
       </div>
     </div>
