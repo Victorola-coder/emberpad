@@ -27,18 +27,25 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nextapptemplate.xyz"),
+  metadataBase: new URL("https://emberpad.com"),
   icons: {
-    icon: "/icon.png",
+    icon: "/favicon.ico",
   },
-  title: "nextjs template",
+  title: "Emberpad - Where Goals Become Commitments",
   description:
-    "I fell in love with next.js, im trying to make a template for it also",
-  applicationName: "next Web Application",
-  authors: [{ name: "nextapp template", url: "https://domainname.host" }],
-  keywords: ["NextJs", "reactjs", "template", "typescript"],
-  creator: "VickyJay",
-  publisher: "VickyJay",
+    "Transform your personal goals into social commitments. Track progress, get reminders from friends, and achieve more together.",
+  applicationName: "Emberpad",
+  authors: [{ name: "Emberpad Team", url: "https://emberpad.com" }],
+  keywords: [
+    "goals",
+    "productivity",
+    "social",
+    "accountability",
+    "tracking",
+    "reminders",
+  ],
+  creator: "Emberpad",
+  publisher: "Emberpad",
   generator: "Next.js",
   referrer: "origin",
   robots: {
@@ -47,41 +54,40 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://domainname.host",
-    title: "Nextjs template",
-    siteName: "nextapp template",
+    url: "https://emberpad.com",
+    title: "Emberpad - Where Goals Become Commitments",
+    siteName: "Emberpad",
     locale: "en_US",
     images: [
       {
-        url: "linktoopengraphimage.cdn",
+        url: "https://emberpad.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "next OG Image",
+        alt: "Emberpad - Social Goal Tracking Platform",
       },
     ],
   },
   twitter: {
-    site: "nextapp",
-    creator: "socialmediahandle",
-    title:
-      "nextapp template - I fell in love with next.js, im trying to make a template for it tooo",
+    site: "emberpad",
+    creator: "emberpad",
+    title: "Emberpad - Where Goals Become Commitments",
     description:
-      "I fell in love with next.js, im trying to make a template for it too",
+      "Transform your personal goals into social commitments. Track progress, get reminders from friends, and achieve more together.",
     card: "summary_large_image",
-    images: ["linktoopengraph.com"],
+    images: ["https://emberpad.com/twitter-card.png"],
   },
   appleWebApp: {
     capable: true,
-    title: "nextapp template",
+    title: "Emberpad",
     statusBarStyle: "black-translucent",
   },
   formatDetection: {
     telephone: false,
   },
   abstract:
-    "I fell in love with next.js, im trying to make a template for it tooo",
-  category: "Social",
-  classification: "Social",
+    "Transform your personal goals into social commitments. Track progress, get reminders from friends, and achieve more together.",
+  category: "Productivity",
+  classification: "Social Goal Tracking",
 };
 
 export default function RootLayout({

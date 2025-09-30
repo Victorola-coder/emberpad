@@ -1,0 +1,229 @@
+# EMBERPAD - Product Requirements Document
+
+## 1. PRODUCT OVERVIEW
+
+### Vision Statement
+Emberpad is a social goal tracking platform that transforms personal goal-setting from a private notepad experience into a collaborative, accountable community. Users create, share, and track goals while receiving support and reminders from their network.
+
+### Core Value Proposition
+- **Social Accountability**: Public goals increase commitment through social pressure
+- **Community Support**: Friends can send reminders and encouragement
+- **Progress Visibility**: Visual progress tracking motivates continued effort
+- **Goal Discovery**: Find inspiration from others' goals and achievements
+
+## 2. TARGET USERS
+
+### Primary Users
+- **Goal-Setters**: Individuals who want to achieve personal/professional goals
+- **Accountability Partners**: Friends, family, colleagues who support others
+- **Goal Enthusiasts**: People who enjoy tracking and sharing achievements
+
+### User Personas
+1. **Sarah (25, Marketing)**: Wants to stay accountable to fitness goals, shares with friends
+2. **Mike (30, Developer)**: Learning new skills, wants community support and progress tracking
+3. **Lisa (28, Entrepreneur)**: Building business goals, needs motivation and networking
+
+## 3. CORE FEATURES
+
+### 3.1 Goal Management
+- **Create Goals**: Title, description, category, target date, privacy settings
+- **Goal Categories**: Health, Career, Learning, Personal, Finance, Creative
+- **Progress Tracking**: Percentage completion, milestone updates
+- **Goal Templates**: Pre-made templates for common goals
+
+### 3.2 Social Features
+- **Public/Private Goals**: Control visibility of goals
+- **Follow System**: Follow friends and see their public goals
+- **Goal Feed**: Timeline of goals from people you follow
+- **Goal Discovery**: Browse and search public goals
+
+### 3.3 Reminder System
+- **Send Reminders**: Nudge friends about their goals
+- **Reminder Types**: Encouragement, check-in, deadline alerts
+- **Reminder Scheduling**: One-time or recurring reminders
+- **Notification Center**: In-app and email notifications
+
+### 3.4 Progress & Analytics
+- **Progress Updates**: Mark milestones, update completion percentage
+- **Goal Streaks**: Track consecutive days of progress
+- **Achievement Badges**: Unlock badges for milestones
+- **Goal History**: Archive completed goals
+
+## 4. USER FLOWS
+
+### 4.1 Onboarding Flow
+1. Sign up with email/social
+2. Create profile (name, bio, interests)
+3. Set first goal (guided tutorial)
+4. Follow suggested users
+5. Explore goal feed
+
+### 4.2 Daily Usage Flow
+1. Open dashboard
+2. View goal feed (your goals + followed users)
+3. Update progress on your goals
+4. Send reminders to friends
+5. Check notifications
+
+### 4.3 Goal Creation Flow
+1. Click "Create Goal"
+2. Choose category
+3. Fill goal details (title, description, target date)
+4. Set privacy (public/private)
+5. Add milestones (optional)
+6. Publish goal
+
+### 4.4 Reminder Flow
+1. View friend's goal
+2. Click "Send Reminder"
+3. Choose reminder type
+4. Add personal message
+5. Send reminder
+
+## 5. TECHNICAL REQUIREMENTS
+
+### 5.1 Frontend
+- **Framework**: Next.js 15 (already set up)
+- **Styling**: Tailwind CSS (already configured)
+- **State Management**: React Context + useState/useReducer
+- **Animations**: Framer Motion (already installed)
+- **UI Components**: Custom component library (already built)
+
+### 5.2 Backend
+- **Database**: PostgreSQL (recommended for relational data)
+- **Authentication**: NextAuth.js or Supabase Auth
+- **API**: Next.js API routes
+- **File Storage**: Cloudinary or AWS S3 for images
+- **Real-time**: WebSockets or Server-Sent Events
+
+### 5.3 Data Models
+
+#### User
+- id, email, name, bio, avatar, createdAt, updatedAt
+
+#### Goal
+- id, userId, title, description, category, targetDate, privacy, status, progress, createdAt, updatedAt
+
+#### Reminder
+- id, fromUserId, toUserId, goalId, message, type, sentAt, readAt
+
+#### Follow
+- id, followerId, followingId, createdAt
+
+### 5.4 API Endpoints
+- GET /api/goals - Fetch user's goals
+- POST /api/goals - Create new goal
+- PUT /api/goals/[id] - Update goal
+- DELETE /api/goals/[id] - Delete goal
+- POST /api/reminders - Send reminder
+- GET /api/feed - Get goal feed
+- POST /api/follow - Follow user
+- GET /api/users/[id]/goals - Get user's public goals
+
+## 6. DESIGN SYSTEM
+
+### 6.1 Brand Identity
+- **Name**: Emberpad (suggests warmth, persistence, and writing)
+- **Tagline**: "Where goals become commitments"
+- **Tone**: Encouraging, supportive, motivational
+
+### 6.2 Visual Design
+- **Color Palette**: Warm, energetic colors (oranges, reds, yellows)
+- **Typography**: Modern, readable fonts (Geist Sans for body, Geist Mono for code)
+- **Layout**: Card-based design, clean and minimal
+- **Icons**: Lucide React icons (already installed)
+
+### 6.3 Component Design
+- **Goal Cards**: Prominent, colorful, progress indicators
+- **Progress Bars**: Animated, satisfying to update
+- **Reminder Cards**: Friendly, encouraging design
+- **User Profiles**: Clean, professional, goal-focused
+
+## 7. SUCCESS METRICS
+
+### 7.1 Engagement Metrics
+- Daily/Monthly Active Users
+- Goals created per user
+- Reminders sent per user
+- Goal completion rate
+
+### 7.2 Social Metrics
+- Follow connections made
+- Public vs private goal ratio
+- Reminder response rate
+- Goal sharing frequency
+
+### 7.3 Product Metrics
+- Time to first goal creation
+- Goal completion rate
+- User retention (7-day, 30-day)
+- Feature adoption rate
+
+## 8. LAUNCH STRATEGY
+
+### 8.1 MVP Features (Phase 1)
+- User authentication
+- Goal creation and management
+- Basic progress tracking
+- Simple reminder system
+- Public goal feed
+
+### 8.2 Enhanced Features (Phase 2)
+- Advanced analytics
+- Goal templates
+- Achievement system
+- Mobile app
+- Team/group goals
+
+### 8.3 Advanced Features (Phase 3)
+- AI-powered goal suggestions
+- Integration with other apps
+- Goal challenges
+- Premium features
+
+## 9. COMPETITIVE ANALYSIS
+
+### 9.1 Direct Competitors
+- **Habitica**: Gamified habit tracking
+- **StickK**: Commitment contracts
+- **Beeminder**: Data-driven goal tracking
+
+### 9.2 Differentiators
+- **Social-first approach**: Built around community accountability
+- **Reminder system**: Proactive support from friends
+- **Visual progress**: Beautiful, shareable goal cards
+- **Flexible privacy**: Control over goal visibility
+
+## 10. RISKS & MITIGATION
+
+### 10.1 Technical Risks
+- **Scalability**: Plan for database optimization and caching
+- **Real-time updates**: Use efficient WebSocket implementation
+- **File storage**: Implement CDN for images
+
+### 10.2 Product Risks
+- **User adoption**: Focus on onboarding and first-time experience
+- **Spam/abuse**: Implement reporting and moderation
+- **Privacy concerns**: Clear privacy controls and data handling
+
+### 10.3 Business Risks
+- **Competition**: Focus on unique social features
+- **Monetization**: Plan freemium model with premium features
+- **User retention**: Gamification and community features
+
+## 11. NEXT STEPS
+
+1. **Design System**: Finalize colors, typography, and component styles
+2. **Database Schema**: Design and implement data models
+3. **Authentication**: Set up user management system
+4. **Core Features**: Build goal creation and management
+5. **Social Features**: Implement follow system and feed
+6. **Reminder System**: Build notification infrastructure
+7. **Testing**: User testing and feedback collection
+8. **Launch**: Deploy MVP and gather user feedback
+
+---
+
+**Document Version**: 1.0
+**Last Updated**: [Current Date]
+**Next Review**: [Date + 1 week]
