@@ -9,8 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        // if you are using variable and want to use more than one fonts for your webapp,you could define it here. like i did
-        geistSans: ["var(--font-geist-sans)"],
+        // Typography mapping
+        // Default body font
+        sans: ["var(--font-inter)"],
+        // Headings font utility: use class `font-heading` for Space Grotesk
+        heading: ["var(--font-space-grotesk)"],
+        // Backward-compat alias so existing `font-geistSans` uses Inter
+        geistSans: ["var(--font-inter)"],
       },
       keyframes: {
         "fade-effect": {
