@@ -1,0 +1,187 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Card } from "./ui";
+import {
+  Target,
+  Calendar,
+  Users,
+  TrendingUp,
+  MoreVertical,
+  Heart,
+  MessageCircle,
+  Share,
+} from "lucide-react";
+
+interface GoalCardProps {
+  goal: {
+    id: string;
+    title: string;
+    description?: string;
+    category: string;
+    targetDate?: string;
+    privacy: string;
+    status: string;
+    progress: number;
+    user: {
+      id: string;
+      name: string;
+      avatar?: string;
+    };
+    createdAt: string;
+  };
+  onUpdateProgress?: (goalId: string, progress: number) => void;
+  onSendReminder?: (goalId: string, userId: string) => void;
+  showActions?: boolean;
+}
+
+export default function GoalCard({
+  goal,
+  onUpdateProgress,
+  onSendReminder,
+  showActions = true,
+}: GoalCardProps) {
+  const getCategoryColor = (category: string) => {
+    const colors = {
+      health: "from-success-400 to-success-600",
+      career: "from-ocean-400 to-ocean-600",
+      learning: "from-ember-400 to-ember-600",
+      personal: "from-sunshine-400 to-sunshine-600",
+      finance: "from-warning-400 to-warning-600",
+      creative: "from-danger-400 to-danger-600",
+    };
+    return (
+      colors[category as keyof typeof colors] || "from-ember-400 to-ember-600"
+    );
+  };
+
+  const getStatusColor = (status: string) => {
+    const colors = {
+      active: "text-success-400",
+      completed: "text-success-500",
+      paused: "text-warning-500",
+      cancelled: "text-danger-500",
+    };
+    return colors[status as keyof typeof colors] || "text-ember-400";
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4 }}
+      className="group"
+    >
+      <Card className="relative overflow-hidden hover:shadow-xl hover:shadow-ember-500/10 transition-all duration-300">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div
+              className={`w-10 h-10 rounded-full bg-gradient-to-r ${getCategoryColor(
+                goal.category
+              )} flex items-center justify-center`}
+            >
+              <Target className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-heading font-semibold text-white text-lg group-hover:text-ember-400 transition-colors">
+                {goal.title}
+              </h3>
+              <p className="text-dark-400 text-sm">by {goal.user.name}</p>
+            </div>
+          </div>
+
+          {showActions && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => onSendReminder?.(goal.id, goal.user.id)}
+                className="p-2 hover:bg-dark-700 rounded-lg transition-colors"
+                title="Send reminder"
+              >
+                <Heart className="w-4 h-4 text-dark-400 hover:text-ember-400" />
+              </button>
+              <button className="p-2 hover:bg-dark-700 rounded-lg transition-colors">
+                <MoreVertical className="w-4 h-4 text-dark-400" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Description */}
+        {goal.description && (
+          <p className="text-dark-300 mb-4 leading-relaxed">
+            {goal.description}
+          </p>
+        )}
+
+        {/* Progress Bar */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-dark-400">Progress</span>
+            <span className="text-sm font-medium text-white">
+              {goal.progress}%
+            </span>
+          </div>
+          <div className="w-full bg-dark-700 rounded-full h-2">
+            <motion.div
+              className={`h-2 rounded-full bg-gradient-to-r ${getCategoryColor(
+                goal.category
+              )}`}
+              initial={{ width: 0 }}
+              animate={{ width: `${goal.progress}%` }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          </div>
+        </div>
+
+        {/* Status and Date */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4">
+            <span
+              className={`text-sm font-medium ${getStatusColor(goal.status)}`}
+            >
+              {goal.status.charAt(0).toUpperCase() + goal.status.slice(1)}
+            </span>
+            {goal.targetDate && (
+              <div className="flex items-center gap-1 text-dark-400">
+                <Calendar className="w-4 h-4" />
+                <span className="text-sm">{formatDate(goal.targetDate)}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1 text-dark-400">
+            <Users className="w-4 h-4" />
+            <span className="text-sm capitalize">{goal.privacy}</span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        {showActions && (
+          <div className="flex items-center gap-2 pt-4 border-t border-dark-700">
+            <button className="flex items-center gap-2 px-3 py-2 bg-ember-500/10 hover:bg-ember-500/20 text-ember-400 rounded-lg transition-colors text-sm font-medium">
+              <TrendingUp className="w-4 h-4" />
+              Update Progress
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 rounded-lg transition-colors text-sm font-medium">
+              <MessageCircle className="w-4 h-4" />
+              Comment
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 rounded-lg transition-colors text-sm font-medium">
+              <Share className="w-4 h-4" />
+              Share
+            </button>
+          </div>
+        )}
+      </Card>
+    </motion.div>
+  );
+}
