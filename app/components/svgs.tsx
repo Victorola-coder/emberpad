@@ -1,5 +1,10 @@
 import { clsx } from "clsx";
 
+interface SVGProps {
+  className?: string;
+  fill?: string;
+}
+
 export const EyeIcon = ({ className, fill }: SVGProps) => {
   return (
     <svg

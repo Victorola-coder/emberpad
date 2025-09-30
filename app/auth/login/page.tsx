@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Button, Input, Card } from "../components/ui";
-import { Animation } from "../components/global";
-import { EyeIcon } from "../components/svgs";
+import { Button, Input, Card } from "../../components/ui";
+import { Animation } from "../../components/global";
+import { EyeIcon } from "../../components/svgs";
 import { Target, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 
