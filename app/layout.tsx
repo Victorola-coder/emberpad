@@ -1,6 +1,7 @@
 import "./global.css";
 import { Toaster } from "sonner";
 import { AOS } from "./components/global";
+import { AuthProvider } from "./contexts/AuthContext";
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 
@@ -94,9 +95,11 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.className} ${inter.variable} antialiased`}
       >
-        <Toaster richColors />
-        <AOS />
-        {children}
+        <AuthProvider>
+          <Toaster richColors />
+          <AOS />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
