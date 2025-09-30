@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
 
 const updateGoalSchema = z.object({
   title: z.string().min(1).optional(),
   description: z.string().optional(),
   category: z.string().optional(),
   targetDate: z.string().datetime().optional(),
-  privacy: z.enum(['public', 'private', 'friends']).optional(),
-  status: z.enum(['active', 'completed', 'paused', 'cancelled']).optional(),
+  privacy: z.enum(["public", "private", "friends"]).optional(),
+  status: z.enum(["active", "completed", "paused", "cancelled"]).optional(),
   progress: z.number().min(0).max(100).optional(),
-})
+});
 
 // GET /api/goals/[id] - Get single goal
 export async function GET(
@@ -29,16 +29,19 @@ export async function GET(
           },
         },
       },
-    })
+    });
 
     if (!goal) {
-      return NextResponse.json({ error: 'Goal not found' }, { status: 404 })
+      return NextResponse.json({ error: "Goal not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ goal })
+    return NextResponse.json({ goal });
   } catch (error) {
-    console.error('Error fetching goal:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error("Error fetching goal:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -48,14 +51,16 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const body = await request.json()
-    const validatedData = updateGoalSchema.parse(body)
+    const body = await request.json();
+    const validatedData = updateGoalSchema.parse(body);
 
     const goal = await prisma.goal.update({
       where: { id: params.id },
       data: {
         ...validatedData,
-        targetDate: validatedData.targetDate ? new Date(validatedData.targetDate) : undefined,
+        targetDate: validatedData.targetDate
+          ? new Date(validatedData.targetDate)
+          : undefined,
       },
       include: {
         user: {
@@ -66,15 +71,18 @@ export async function PUT(
           },
         },
       },
-    })
+    });
 
-    return NextResponse.json({ goal })
+    return NextResponse.json({ goal });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors }, { status: 400 })
+      return NextResponse.json({ error: error.errors }, { status: 400 });
     }
-    console.error('Error updating goal:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error("Error updating goal:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -86,11 +94,14 @@ export async function DELETE(
   try {
     await prisma.goal.delete({
       where: { id: params.id },
-    })
+    });
 
-    return NextResponse.json({ message: 'Goal deleted successfully' })
+    return NextResponse.json({ message: "Goal deleted successfully" });
   } catch (error) {
-    console.error('Error deleting goal:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error("Error deleting goal:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
