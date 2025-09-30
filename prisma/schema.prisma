@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  bio       String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  goals      Goal[]
+  reminders  Reminder[] @relation("ReminderSender")
+  receivedReminders Reminder[] @relation("ReminderReceiver")
+  following  Follow[] @relation("Follower")
+  followers  Follow[] @relation("Following")
+
+  @@map("users")
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String   @default("personal")
+  targetDate  DateTime?
+  privacy     String   @default("public") // public, private, friends
+  status      String   @default("active") // active, completed, paused, cancelled
+  progress    Int      @default(0) // 0-100
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reminders Reminder[]
+
+  @@map("goals")
+}
+
+model Reminder {
+  id        String   @id @default(cuid())
+  message   String
+  type      String   @default("encouragement") // encouragement, checkin, deadline
+  goalId    String
+  fromUserId String
+  toUserId  String
+  sentAt    DateTime @default(now())
+  readAt    DateTime?
+
+  // Relations
+  goal      Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  fromUser  User @relation("ReminderSender", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser    User @relation("ReminderReceiver", fields: [toUserId], references: [id], onDelete: Cascade)
+
+  @@map("reminders")
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
