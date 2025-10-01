@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button, Card } from "../components/ui";
 import GoalCard from "../components/GoalCard";
+import Header from "../components/Header";
+import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
 import {
   User,
@@ -36,7 +38,7 @@ interface Goal {
 }
 
 export default function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
@@ -78,16 +80,51 @@ export default function ProfilePage() {
     }
   }, [user]);
 
-  const handleUpdateProgress = (goalId: string, progress: number) => {
-    setGoals((prev) =>
-      prev.map((goal) => (goal.id === goalId ? { ...goal, progress } : goal))
-    );
+  const handleUpdateProgress = async (goalId: string, progress: number) => {
+    try {
+      const response = await fetch(`/api/goals/${goalId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ progress }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setGoals((prev) =>
+          prev.map((goal) =>
+            goal.id === goalId ? { ...goal, ...data.goal } : goal
+          )
+        );
+        alert("Progress updated successfully!");
+      } else {
+        alert("Failed to update progress");
+      }
+    } catch (error) {
+      console.error("Error updating progress:", error);
+      alert("Error updating progress");
+    }
   };
 
   const handleSendReminder = (goalId: string, userId: string) => {
-    console.log("Send reminder to user:", userId, "for goal:", goalId);
+    // Not needed on profile page (own goals)
+    console.log("Send reminder:", goalId, userId);
   };
 
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 flex items-center justify-center">
+        <div className="animate-pulse space-y-8">
+          <div className="h-8 bg-dark-700 rounded w-1/3"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show message if not authenticated
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 flex items-center justify-center">
@@ -107,8 +144,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
+      <Header />
+      <div className="max-w-6xl mx-auto p-8">
         {/* Profile Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -139,15 +177,20 @@ export default function ProfilePage() {
               </div>
 
               <div className="flex items-center gap-3">
-                <Button variant="secondary" size="sm">
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </Button>
-                <Button variant="secondary" size="sm">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </Button>
-                <Button variant="danger" size="sm" onClick={logout}>
+                <Link href="/profile/edit">
+                  <Button variant="secondary" size="sm">
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Profile
+                  </Button>
+                </Link>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => {
+                    logout();
+                    window.location.href = "/auth/login";
+                  }}
+                >
                   Logout
                 </Button>
               </div>
@@ -247,6 +290,8 @@ export default function ProfilePage() {
                         onUpdateProgress={handleUpdateProgress}
                         onSendReminder={handleSendReminder}
                         showActions={true}
+                        isOwnGoal={true}
+                        currentUserId={user?.id}
                       />
                     </motion.div>
                   ))}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Card } from "./components/ui";
 import { motion } from "framer-motion";
 import { Animation } from "./components/global";
+import Link from "next/link";
 import {
   Target,
   Users,
@@ -138,41 +139,45 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.8 }}
             >
-              <Button
-                variant="primary"
-                size="lg"
-                className="group relative overflow-hidden"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <motion.span
-                  className="flex items-center gap-2"
-                  animate={{ x: isHovered ? 5 : 0 }}
-                  transition={{ duration: 0.2 }}
+              <Link href="/auth/signup">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="group relative overflow-hidden"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
                 >
-                  Get Started Free
-                  <ArrowRight className="w-5 h-5" />
-                </motion.span>
-              </Button>
-
-              <Button variant="secondary" size="lg" className="group">
-                <motion.span
-                  className="flex items-center gap-2"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  Watch Demo
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
+                  <motion.span
+                    className="flex items-center gap-2"
+                    animate={{ x: isHovered ? 5 : 0 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <Heart className="w-5 h-5" />
-                  </motion.div>
-                </motion.span>
-              </Button>
+                    Get Started Free
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.span>
+                </Button>
+              </Link>
+
+              <Link href="/auth/login">
+                <Button variant="secondary" size="lg" className="group">
+                  <motion.span
+                    className="flex items-center gap-2"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    Sign In
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    >
+                      <Heart className="w-5 h-5" />
+                    </motion.div>
+                  </motion.span>
+                </Button>
+              </Link>
             </motion.div>
 
             {/* Stats */}
@@ -295,29 +300,33 @@ export default function Home() {
                 transition={{ delay: 0.2, duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                <Button
-                  variant="primary"
-                  size="lg"
-                  className="group relative overflow-hidden"
-                >
-                  <motion.span
-                    className="flex items-center gap-2 relative z-10"
-                    whileHover={{ x: 5 }}
+                <Link href="/auth/signup">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    className="group relative overflow-hidden"
                   >
-                    Start Your Journey
-                    <CheckCircle className="w-5 h-5" />
-                  </motion.span>
-                </Button>
+                    <motion.span
+                      className="flex items-center gap-2 relative z-10"
+                      whileHover={{ x: 5 }}
+                    >
+                      Start Your Journey
+                      <CheckCircle className="w-5 h-5" />
+                    </motion.span>
+                  </Button>
+                </Link>
 
-                <Button variant="secondary" size="lg" className="group">
-                  <motion.span
-                    className="flex items-center gap-2"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    Learn More
-                    <Zap className="w-5 h-5" />
-                  </motion.span>
-                </Button>
+                <Link href="/dashboard">
+                  <Button variant="secondary" size="lg" className="group">
+                    <motion.span
+                      className="flex items-center gap-2"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      Go to Dashboard
+                      <Zap className="w-5 h-5" />
+                    </motion.span>
+                  </Button>
+                </Link>
               </motion.div>
             </div>
           </div>

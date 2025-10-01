@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q");
+    const currentUserId = searchParams.get("currentUserId");
     const limit = parseInt(searchParams.get("limit") || "10");
 
     const where: any = {};
@@ -44,7 +45,23 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ users });
+    // Check if current user is following these users
+    let usersWithFollowStatus = users;
+    if (currentUserId) {
+      const followingIds = await prisma.follow.findMany({
+        where: { followerId: currentUserId },
+        select: { followingId: true },
+      });
+      
+      const followingSet = new Set(followingIds.map(f => f.followingId));
+      
+      usersWithFollowStatus = users.map(user => ({
+        ...user,
+        isFollowing: followingSet.has(user.id),
+      }));
+    }
+
+    return NextResponse.json({ users: usersWithFollowStatus });
   } catch (error) {
     console.error("Error searching users:", error);
     return NextResponse.json(

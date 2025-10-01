@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, Button } from "./ui";
 import ProgressUpdateModal from "./ProgressUpdateModal";
+import CommentModal from "./CommentModal";
+import ShareModal from "./ShareModal";
 import {
   Target,
   Calendar,
@@ -36,6 +38,7 @@ interface GoalCardProps {
   onSendReminder?: (goalId: string, userId: string) => void;
   showActions?: boolean;
   isOwnGoal?: boolean;
+  currentUserId?: string;
 }
 
 export default function GoalCard({
@@ -44,8 +47,11 @@ export default function GoalCard({
   onSendReminder,
   showActions = true,
   isOwnGoal = false,
+  currentUserId,
 }: GoalCardProps) {
   const [showProgressModal, setShowProgressModal] = useState(false);
+  const [showCommentModal, setShowCommentModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const handleProgressUpdate = async (progress: number) => {
     if (onUpdateProgress) {
@@ -188,29 +194,62 @@ export default function GoalCard({
         {/* Action Buttons */}
         {showActions && (
           <div className="flex items-center gap-2 pt-4 border-t border-dark-700">
-            <button className="flex items-center gap-2 px-3 py-2 bg-ember-500/10 hover:bg-ember-500/20 text-ember-400 rounded-lg transition-colors text-sm font-medium">
-              <TrendingUp className="w-4 h-4" />
-              Update Progress
-            </button>
-            <button className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 rounded-lg transition-colors text-sm font-medium">
+            {isOwnGoal && (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowProgressModal(true)}
+                className="flex items-center gap-2 px-3 py-2 bg-ember-500/10 hover:bg-ember-500/20 text-ember-400 rounded-lg transition-colors text-sm font-medium"
+              >
+                <TrendingUp className="w-4 h-4" />
+                Update
+              </motion.button>
+            )}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowCommentModal(true)}
+              className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-sm font-medium"
+            >
               <MessageCircle className="w-4 h-4" />
               Comment
-            </button>
-            <button className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 rounded-lg transition-colors text-sm font-medium">
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowShareModal(true)}
+              className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-sm font-medium"
+            >
               <Share className="w-4 h-4" />
               Share
-            </button>
+            </motion.button>
           </div>
         )}
       </Card>
 
-      {/* Progress Update Modal */}
+      {/* Modals */}
       <ProgressUpdateModal
         isOpen={showProgressModal}
         onClose={() => setShowProgressModal(false)}
         goalTitle={goal.title}
         currentProgress={goal.progress}
         onUpdate={handleProgressUpdate}
+      />
+
+      <CommentModal
+        isOpen={showCommentModal}
+        onClose={() => setShowCommentModal(false)}
+        goalTitle={goal.title}
+        goalId={goal.id}
+        userId={currentUserId || ""}
+        goalOwnerId={goal.user.id}
+      />
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        goalTitle={goal.title}
+        goalId={goal.id}
       />
     </motion.div>
   );

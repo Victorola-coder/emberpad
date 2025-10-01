@@ -7,6 +7,7 @@ import GoalCard from "../components/GoalCard";
 import CreateGoalModal from "../components/CreateGoalModal";
 import UserSearchModal from "../components/UserSearchModal";
 import SocialFeed from "../components/SocialFeed";
+import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import {
   Plus,
@@ -39,7 +40,7 @@ interface Goal {
 }
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -52,11 +53,12 @@ export default function Dashboard() {
 
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!user) {
+    // Only redirect if auth loading is complete and user is still null
+    if (!authLoading && !user) {
       window.location.href = "/auth/login";
       return;
     }
-  }, [user]);
+  }, [user, authLoading]);
 
   // Fetch user's goals from API
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function Dashboard() {
     const fetchGoals = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/goals", {
+        const response = await fetch(`/api/goals?userId=${user.id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -73,7 +75,7 @@ export default function Dashboard() {
 
         if (response.ok) {
           const data = await response.json();
-          setGoals(data);
+          setGoals(data.goals || []);
         } else {
           console.error("Failed to fetch goals");
         }
@@ -99,54 +101,108 @@ export default function Dashboard() {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        // Update the goal in the list with the response from the server
         setGoals((prev) =>
           prev.map((goal) =>
-            goal.id === goalId ? { ...goal, progress } : goal
+            goal.id === goalId ? { ...goal, ...data.goal } : goal
           )
         );
+        alert("Progress updated successfully!");
       } else {
-        console.error("Failed to update progress");
+        const errorData = await response.json();
+        alert(`Failed to update progress: ${errorData.error || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error updating progress:", error);
+      alert("Error updating progress. Please try again.");
     }
   };
 
-  const handleSendReminder = (goalId: string, userId: string) => {
-    console.log("Send reminder to user:", userId, "for goal:", goalId);
-    // Implement reminder logic
+  const handleSendReminder = async (goalId: string, toUserId: string) => {
+    if (!user) return;
+
+    try {
+      const response = await fetch("/api/reminders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          goalId,
+          fromUserId: user.id,
+          toUserId,
+          message: "Keep pushing! You're doing great on your goal! 💪",
+          type: "encouragement",
+        }),
+      });
+
+      if (response.ok) {
+        alert("Encouragement sent successfully!");
+      } else {
+        const data = await response.json();
+        alert(`Failed to send encouragement: ${data.error || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error("Error sending reminder:", error);
+      alert("Error sending encouragement. Please try again.");
+    }
   };
 
   const handleCreateGoal = async (goalData: any) => {
     try {
+      // Prepare payload with proper formatting
+      const payload: any = {
+        title: goalData.title,
+        category: goalData.category,
+        privacy: goalData.privacy,
+        userId: user?.id,
+      };
+
+      // Only include optional fields if they have values
+      if (goalData.description?.trim()) {
+        payload.description = goalData.description;
+      }
+
+      // Convert date to ISO datetime format
+      if (goalData.targetDate) {
+        payload.targetDate = new Date(goalData.targetDate).toISOString();
+      }
+
       const response = await fetch("/api/goals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify(goalData),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
-        const newGoal = await response.json();
-        setGoals((prev) => [newGoal, ...prev]);
+        const data = await response.json();
+        setGoals((prev) => [data.goal, ...prev]);
         setIsCreateModalOpen(false);
+        alert("Goal created successfully!");
       } else {
-        console.error("Failed to create goal");
+        const errorData = await response.json();
+        console.error("Failed to create goal:", errorData);
+        alert(`Failed to create goal: ${errorData.error || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error creating goal:", error);
+      alert("Error creating goal. Please try again.");
     }
   };
 
   const filteredGoals = goals.filter((goal) => {
     if (filter === "all") return true;
-    if (filter === "my-goals") return goal.user.id === "1"; // Current user
+    if (filter === "my-goals") return goal.user.id === user?.id;
     return goal.category === filter;
   });
 
-  if (loading) {
+  // Show loading while authenticating or fetching goals
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 p-8">
         <div className="max-w-6xl mx-auto">
@@ -164,8 +220,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
+      <Header />
+      <div className="max-w-6xl mx-auto p-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -277,7 +334,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-1 bg-dark-800 p-1 rounded-xl w-fit">
             {[
               { id: "my-goals", label: "My Goals", icon: Target },
-              { id: "social-feed", label: "Social Feed", icon: Users },
+              { id: "social-feed", label: "For You", icon: Users },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -379,6 +436,7 @@ export default function Dashboard() {
                       onSendReminder={handleSendReminder}
                       showActions={true}
                       isOwnGoal={goal.user.id === user?.id}
+                      currentUserId={user?.id}
                     />
                   </motion.div>
                 ))}
@@ -446,6 +504,7 @@ export default function Dashboard() {
         <UserSearchModal
           isOpen={isUserSearchOpen}
           onClose={() => setIsUserSearchOpen(false)}
+          currentUserId={user?.id}
         />
       </div>
     </div>

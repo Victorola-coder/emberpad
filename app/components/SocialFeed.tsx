@@ -36,7 +36,7 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
     const fetchFeed = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/feed", {
+        const response = await fetch(`/api/feed?userId=${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -44,7 +44,7 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
 
         if (response.ok) {
           const data = await response.json();
-          setGoals(data);
+          setGoals(data.goals || []);
         }
       } catch (error) {
         console.error("Error fetching feed:", error);
@@ -53,10 +53,12 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
       }
     };
 
-    fetchFeed();
+    if (userId) {
+      fetchFeed();
+    }
   }, [userId]);
 
-  const handleSendReminder = async (goalId: string, userId: string) => {
+  const handleSendReminder = async (goalId: string, toUserId: string) => {
     try {
       const response = await fetch("/api/reminders", {
         method: "POST",
@@ -66,7 +68,8 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
         },
         body: JSON.stringify({
           goalId,
-          toUserId: userId,
+          fromUserId: userId,
+          toUserId,
           message: "Keep up the great work on your goal!",
           type: "encouragement",
         }),
@@ -74,10 +77,13 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
 
       if (response.ok) {
         // Show success message
-        console.log("Reminder sent successfully");
+        alert("Reminder sent successfully!");
+      } else {
+        alert("Failed to send reminder");
       }
     } catch (error) {
       console.error("Error sending reminder:", error);
+      alert("Error sending reminder");
     }
   };
 
@@ -112,9 +118,9 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-heading font-bold text-white mb-2">
-            Social Feed
+            For You
           </h2>
-          <p className="text-dark-400">See what your friends are working on</p>
+          <p className="text-dark-400">Goals from people you follow</p>
         </div>
       </div>
 
@@ -153,7 +159,8 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
               <GoalCard
                 goal={goal}
                 onSendReminder={handleSendReminder}
-                isOwnGoal={false}
+                isOwnGoal={goal.user.id === userId}
+                currentUserId={userId}
                 showActions={true}
               />
             </motion.div>
@@ -166,11 +173,15 @@ export default function SocialFeed({ userId }: SocialFeedProps) {
             No goals to show
           </h3>
           <p className="text-dark-400 mb-6">
-            {filter === "all"
+            {goals.length === 0
               ? "Follow some people to see their goals in your feed"
               : `No ${filter} goals found`}
           </p>
-          <Button variant="primary">Find People to Follow</Button>
+          {goals.length === 0 && (
+            <Button variant="primary" onClick={() => window.location.href = "/explore"}>
+              Explore Public Goals
+            </Button>
+          )}
         </div>
       )}
 

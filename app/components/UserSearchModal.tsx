@@ -8,6 +8,7 @@ import { Search, UserPlus, Users, User } from "lucide-react";
 interface UserSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
+  currentUserId?: string;
   onFollow?: (userId: string) => void;
   onUnfollow?: (userId: string) => void;
 }
@@ -24,13 +25,13 @@ interface User {
 export default function UserSearchModal({
   isOpen,
   onClose,
+  currentUserId,
   onFollow,
   onUnfollow,
 }: UserSearchModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
-  const [following, setFollowing] = useState(false);
 
   const searchUsers = async (query: string) => {
     if (!query.trim()) {
@@ -41,7 +42,7 @@ export default function UserSearchModal({
     try {
       setLoading(true);
       const response = await fetch(
-        `/api/users?search=${encodeURIComponent(query)}`,
+        `/api/users?q=${encodeURIComponent(query)}&currentUserId=${currentUserId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -51,7 +52,7 @@ export default function UserSearchModal({
 
       if (response.ok) {
         const data = await response.json();
-        setUsers(data);
+        setUsers(data.users || []);
       }
     } catch (error) {
       console.error("Error searching users:", error);
@@ -62,13 +63,20 @@ export default function UserSearchModal({
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      searchUsers(searchQuery);
+      if (currentUserId) {
+        searchUsers(searchQuery);
+      }
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+  }, [searchQuery, currentUserId]);
 
-  const handleFollow = async (userId: string) => {
+  const handleFollow = async (followingId: string) => {
+    if (!currentUserId) {
+      alert("Please log in to follow users");
+      return;
+    }
+
     try {
       const response = await fetch("/api/follow", {
         method: "POST",
@@ -76,43 +84,61 @@ export default function UserSearchModal({
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({
+          followerId: currentUserId,
+          followingId,
+        }),
       });
 
       if (response.ok) {
         setUsers((prev) =>
           prev.map((user) =>
-            user.id === userId ? { ...user, isFollowing: true } : user
+            user.id === followingId ? { ...user, isFollowing: true } : user
           )
         );
-        if (onFollow) onFollow(userId);
+        if (onFollow) onFollow(followingId);
+        alert("Successfully followed user!");
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to follow user");
       }
     } catch (error) {
       console.error("Error following user:", error);
+      alert("Error following user");
     }
   };
 
-  const handleUnfollow = async (userId: string) => {
+  const handleUnfollow = async (followingId: string) => {
+    if (!currentUserId) {
+      alert("Please log in to unfollow users");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/follow", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ userId }),
-      });
+      const response = await fetch(
+        `/api/follow?followerId=${currentUserId}&followingId=${followingId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (response.ok) {
         setUsers((prev) =>
           prev.map((user) =>
-            user.id === userId ? { ...user, isFollowing: false } : user
+            user.id === followingId ? { ...user, isFollowing: false } : user
           )
         );
-        if (onUnfollow) onUnfollow(userId);
+        if (onUnfollow) onUnfollow(followingId);
+        alert("Successfully unfollowed user!");
+      } else {
+        alert("Failed to unfollow user");
       }
     } catch (error) {
       console.error("Error unfollowing user:", error);
+      alert("Error unfollowing user");
     }
   };
 
