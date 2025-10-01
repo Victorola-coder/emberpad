@@ -30,12 +30,12 @@ export default function Modal({
 
       {/* Modal Container - Always Centered */}
       <div
-        className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4"
         style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
       >
         <div
-          className={`bg-dark-800 rounded-[32px] border border-dark-600 shadow-2xl p-6 
-            w-full max-w-[500px] max-h-[90vh] flex flex-col ${className || ""}`}
+          className={`bg-dark-800 rounded-2xl sm:rounded-[32px] border border-dark-600 shadow-2xl p-4 sm:p-6 
+            w-full max-w-[95vw] sm:max-w-[500px] max-h-[95vh] sm:max-h-[90vh] flex flex-col overflow-hidden ${className || ""}`}
           onClick={(e) => e.stopPropagation()}
         >
           {title && (

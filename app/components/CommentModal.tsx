@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Modal, Button, TextArea } from "./ui";
+import { Modal, Button } from "./ui";
 import { MessageCircle, Send } from "lucide-react";
 
 interface CommentModalProps {
@@ -69,7 +69,7 @@ export default function CommentModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add Comment">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* Goal Info */}
         <div className="flex items-center gap-3 p-4 bg-dark-800 rounded-xl">
           <div className="w-10 h-10 rounded-full bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
@@ -86,12 +86,14 @@ export default function CommentModal({
           <label className="block text-sm font-medium text-white mb-2">
             Your Comment
           </label>
-          <TextArea
+          <textarea
             placeholder="Share your thoughts, encouragement, or advice..."
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
             name="comment"
             rows={4}
+            className="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500 resize-none"
+            maxLength={500}
             required
           />
           <p className="text-xs text-dark-400 mt-2">

@@ -143,15 +143,15 @@ export default function NotificationsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
-              <Bell className="w-6 h-6 text-white" />
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
+              <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-heading font-bold text-white">
-              Notifications & Comments
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white">
+              Notifications
             </h1>
           </div>
-          <p className="text-dark-300">
+          <p className="text-dark-300 text-sm sm:text-base">
             See all comments and reminders from your network
           </p>
         </motion.div>
@@ -161,46 +161,46 @@ export default function NotificationsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8"
         >
-          <Card className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
-                <Bell className="w-6 h-6 text-white" />
+          <Card className="p-4 sm:p-5 lg:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center flex-shrink-0">
+                <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
-                <p className="text-2xl font-heading font-bold text-white">
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                   {reminders.length}
                 </p>
-                <p className="text-dark-400 text-sm">Total Messages</p>
+                <p className="text-dark-400 text-xs sm:text-sm">Total Messages</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ocean-400 to-ocean-600 flex items-center justify-center">
-                <MessageCircle className="w-6 h-6 text-white" />
+          <Card className="p-4 sm:p-5 lg:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-ocean-400 to-ocean-600 flex items-center justify-center flex-shrink-0">
+                <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
-                <p className="text-2xl font-heading font-bold text-white">
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                   {reminders.filter((r) => r.type === "checkin").length}
                 </p>
-                <p className="text-dark-400 text-sm">Comments</p>
+                <p className="text-dark-400 text-xs sm:text-sm">Comments</p>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-success-400 to-success-600 flex items-center justify-center">
-                <Heart className="w-6 h-6 text-white" />
+          <Card className="p-4 sm:p-5 lg:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-success-400 to-success-600 flex items-center justify-center flex-shrink-0">
+                <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
-                <p className="text-2xl font-heading font-bold text-white">
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                   {reminders.filter((r) => r.type === "encouragement").length}
                 </p>
-                <p className="text-dark-400 text-sm">Encouragements</p>
+                <p className="text-dark-400 text-xs sm:text-sm">Encouragements</p>
               </div>
             </div>
           </Card>
@@ -221,28 +221,30 @@ export default function NotificationsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex items-start gap-4">
+                <Card className="p-4 sm:p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     {/* Icon */}
                     <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-r ${getReminderColor(
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r ${getReminderColor(
                         reminder.type
                       )} flex items-center justify-center flex-shrink-0`}
                     >
-                      {getReminderIcon(reminder.type)}
+                      <div className="w-4 h-4 sm:w-5 sm:h-5">
+                        {getReminderIcon(reminder.type)}
+                      </div>
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4 mb-2">
-                        <div>
-                          <p className="text-sm text-dark-400">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-4 mb-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs sm:text-sm text-dark-400">
                             From{" "}
                             <span className="text-white font-medium">
                               {reminder.fromUser.name}
                             </span>
                           </p>
-                          <p className="text-sm text-dark-400">
+                          <p className="text-xs sm:text-sm text-dark-400 truncate">
                             On goal:{" "}
                             <span className="text-ember-400">
                               {reminder.goal.title}
@@ -254,7 +256,7 @@ export default function NotificationsPage() {
                         </span>
                       </div>
 
-                      <p className="text-white text-lg leading-relaxed mb-3">
+                      <p className="text-white text-sm sm:text-base lg:text-lg leading-relaxed mb-3 break-words">
                         {reminder.message}
                       </p>
 

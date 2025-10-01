@@ -144,14 +144,14 @@ export default function UserSearchModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Find People to Follow">
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Search Input */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-dark-400" />
           <Input
             placeholder="Search by name or email..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -168,25 +168,25 @@ export default function UserSearchModal({
                 key={user.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-4 p-4 bg-dark-800 rounded-xl border border-dark-700 hover:border-dark-600 transition-colors"
+                className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-dark-800 rounded-xl border border-dark-700 hover:border-dark-600 transition-colors"
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center flex-shrink-0">
                   {user.avatar ? (
                     <img
                       src={user.avatar}
                       alt={user.name}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                     />
                   ) : (
-                    <User className="w-6 h-6 text-white" />
+                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   )}
                 </div>
 
-                <div className="flex-1">
-                  <h3 className="font-medium text-white">{user.name}</h3>
-                  <p className="text-sm text-dark-400">{user.email}</p>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-white text-sm sm:text-base truncate">{user.name}</h3>
+                  <p className="text-xs sm:text-sm text-dark-400 truncate">{user.email}</p>
                   {user.bio && (
-                    <p className="text-sm text-dark-300 mt-1">{user.bio}</p>
+                    <p className="text-xs sm:text-sm text-dark-300 mt-1 line-clamp-1">{user.bio}</p>
                   )}
                 </div>
 
@@ -198,17 +198,17 @@ export default function UserSearchModal({
                       ? handleUnfollow(user.id)
                       : handleFollow(user.id)
                   }
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2 flex-shrink-0"
                 >
                   {user.isFollowing ? (
                     <>
                       <Users className="w-4 h-4" />
-                      Following
+                      <span className="hidden sm:inline">Following</span>
                     </>
                   ) : (
                     <>
                       <UserPlus className="w-4 h-4" />
-                      Follow
+                      <span className="hidden sm:inline">Follow</span>
                     </>
                   )}
                 </Button>

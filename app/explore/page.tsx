@@ -163,66 +163,66 @@ export default function ExplorePage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
-                  <Globe className="w-6 h-6 text-white" />
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
+                  <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <h1 className="text-4xl font-heading font-bold text-white">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white">
                   Explore Goals
                 </h1>
               </div>
-              <p className="text-dark-300">
+              <p className="text-dark-300 text-sm sm:text-base">
                 Discover and get inspired by public goals from the community
               </p>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
-                  <Target className="w-6 h-6 text-white" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+            <Card className="p-4 sm:p-5 lg:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center flex-shrink-0">
+                  <Target className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <p className="text-2xl font-heading font-bold text-white">
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                     {goals.length}
                   </p>
-                  <p className="text-dark-400 text-sm">Public Goals</p>
+                  <p className="text-dark-400 text-xs sm:text-sm">Public Goals</p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-success-400 to-success-600 flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-white" />
+            <Card className="p-4 sm:p-5 lg:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-success-400 to-success-600 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <p className="text-2xl font-heading font-bold text-white">
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                     {Math.round(
                       goals.reduce((acc, goal) => acc + goal.progress, 0) /
                         goals.length
                     ) || 0}
                     %
                   </p>
-                  <p className="text-dark-400 text-sm">Avg Progress</p>
+                  <p className="text-dark-400 text-xs sm:text-sm">Avg Progress</p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ocean-400 to-ocean-600 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-white" />
+            <Card className="p-4 sm:p-5 lg:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-ocean-400 to-ocean-600 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <p className="text-2xl font-heading font-bold text-white">
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                     {new Set(goals.map((g) => g.user.id)).size}
                   </p>
-                  <p className="text-dark-400 text-sm">Active Users</p>
+                  <p className="text-dark-400 text-xs sm:text-sm">Active Users</p>
                 </div>
               </div>
             </Card>
@@ -239,13 +239,13 @@ export default function ExplorePage() {
           {/* Search Bar */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-dark-400" />
-            <input
-              type="text"
-              placeholder="Search goals by title, description, or user..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
-            />
+          <input
+            type="text"
+            placeholder="Search goals by title, description, or user..."
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
+          />
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -274,7 +274,7 @@ export default function ExplorePage() {
             {/* Category Filter */}
             <select
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategoryFilter(e.target.value)}
               className="bg-dark-800 border border-dark-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
             >
               <option value="all">All Categories</option>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Modal, Button } from "./ui";
 import {
@@ -27,18 +27,54 @@ export default function ShareModal({
   goalId,
 }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
 
-  const shareUrl = `${window.location.origin}/goal/${goalId}`;
+  // Set share URL after component mounts (client-side only)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setShareUrl(`${window.location.origin}/goal/${goalId}`);
+    }
+  }, [goalId]);
+
   const shareText = `Check out my goal: ${goalTitle} on Emberpad!`;
 
   const handleCopy = async () => {
+    if (!shareUrl) {
+      alert("Share link not ready yet. Please try again.");
+      return;
+    }
+
     try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      // Check if clipboard API is available
+      if (!navigator.clipboard) {
+        // Fallback for older browsers or HTTP contexts
+        const textArea = document.createElement("textarea");
+        textArea.value = shareUrl;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          document.execCommand("copy");
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+          console.error("Fallback copy failed:", err);
+          alert("Failed to copy link. Please copy manually: " + shareUrl);
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
     } catch (error) {
       console.error("Failed to copy:", error);
-      alert("Failed to copy link");
+      // Show the URL so user can copy manually
+      prompt("Copy this link:", shareUrl);
     }
   };
 
@@ -75,7 +111,7 @@ export default function ShareModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Share Goal">
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Goal Info */}
         <div className="flex items-center gap-3 p-4 bg-dark-800 rounded-xl">
           <div className="w-10 h-10 rounded-full bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
@@ -95,9 +131,10 @@ export default function ShareModal({
           <div className="flex items-center gap-2">
             <input
               type="text"
-              value={shareUrl}
+              value={shareUrl || "Loading..."}
               readOnly
-              className="flex-1 px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
+              className="flex-1 px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500 text-sm sm:text-base"
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.select()}
             />
             <Button
               onClick={handleCopy}

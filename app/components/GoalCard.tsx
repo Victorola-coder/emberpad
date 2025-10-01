@@ -193,35 +193,35 @@ export default function GoalCard({
 
         {/* Action Buttons */}
         {showActions && (
-          <div className="flex items-center gap-2 pt-4 border-t border-dark-700">
+          <div className="flex items-center gap-1.5 sm:gap-2 pt-4 border-t border-dark-700">
             {isOwnGoal && (
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowProgressModal(true)}
-                className="flex items-center gap-2 px-3 py-2 bg-ember-500/10 hover:bg-ember-500/20 text-ember-400 rounded-lg transition-colors text-sm font-medium"
+                className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-ember-500/10 hover:bg-ember-500/20 text-ember-400 rounded-lg transition-colors text-xs sm:text-sm font-medium flex-1 sm:flex-initial"
               >
-                <TrendingUp className="w-4 h-4" />
-                Update
+                <TrendingUp className="w-4 h-4 flex-shrink-0" />
+                <span className="hidden xs:inline sm:inline">Update</span>
               </motion.button>
             )}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowCommentModal(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-xs sm:text-sm font-medium flex-1 sm:flex-initial"
             >
-              <MessageCircle className="w-4 h-4" />
-              Comment
+              <MessageCircle className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">Comment</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowShareModal(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-xs sm:text-sm font-medium flex-1 sm:flex-initial"
             >
-              <Share className="w-4 h-4" />
-              Share
+              <Share className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">Share</span>
             </motion.button>
           </div>
         )}

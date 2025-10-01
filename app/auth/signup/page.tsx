@@ -70,7 +70,7 @@ export default function SignupPage() {
 
   return (
     <Animation>
-      <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         {/* Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
@@ -108,17 +108,17 @@ export default function SignupPage() {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center justify-center gap-2 mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
-                <Target className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
+                <Target className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <span className="text-3xl font-heading font-bold text-white">
+              <span className="text-2xl sm:text-3xl font-heading font-bold text-white">
                 Emberpad
               </span>
             </div>
-            <h1 className="text-2xl font-heading font-bold text-white mb-2">
+            <h1 className="text-xl sm:text-2xl font-heading font-bold text-white mb-2">
               Join the Community
             </h1>
-            <p className="text-dark-300">
+            <p className="text-dark-300 text-sm sm:text-base">
               Start your goal journey with social accountability
             </p>
           </motion.div>
@@ -129,8 +129,8 @@ export default function SignupPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            <Card className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <Card className="p-4 sm:p-6 lg:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-medium text-white mb-2">
@@ -140,7 +140,7 @@ export default function SignupPage() {
                     type="text"
                     placeholder="Enter your full name"
                     value={formData.name}
-                    onChange={(e) => handleChange("name", e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("name", e.target.value)}
                     required
                   />
                 </div>
@@ -154,7 +154,7 @@ export default function SignupPage() {
                     type="email"
                     placeholder="Enter your email"
                     value={formData.email}
-                    onChange={(e) => handleChange("email", e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("email", e.target.value)}
                     required
                   />
                 </div>
@@ -168,7 +168,7 @@ export default function SignupPage() {
                     type="text"
                     placeholder="Tell us about yourself..."
                     value={formData.bio}
-                    onChange={(e) => handleChange("bio", e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("bio", e.target.value)}
                   />
                 </div>
 
@@ -182,7 +182,7 @@ export default function SignupPage() {
                       type={showPassword ? "text" : "password"}
                       placeholder="Create a strong password"
                       value={formData.password}
-                      onChange={(e) => handleChange("password", e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("password", e.target.value)}
                       required
                     />
                     <button
@@ -205,7 +205,7 @@ export default function SignupPage() {
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm your password"
                       value={formData.confirmPassword}
-                      onChange={(e) =>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         handleChange("confirmPassword", e.target.value)
                       }
                       required
@@ -229,7 +229,7 @@ export default function SignupPage() {
                   <input
                     type="checkbox"
                     checked={agreedToTerms}
-                    onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAgreedToTerms(e.target.checked)}
                     className="w-4 h-4 rounded border-dark-600 bg-dark-800 text-ember-500 focus:ring-ember-500 mt-1"
                     required
                   />

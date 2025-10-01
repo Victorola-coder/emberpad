@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Button, Card, Input, TextArea } from "../../components/ui";
+import { Button, Card, Input } from "../../components/ui";
 import Header from "../../components/Header";
 import { useAuth } from "../../contexts/AuthContext";
 import { User, Save, ArrowLeft } from "lucide-react";
@@ -98,15 +98,15 @@ export default function EditProfilePage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Profile
           </Link>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
-              <User className="w-6 h-6 text-white" />
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
+              <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-heading font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white">
               Edit Profile
             </h1>
           </div>
-          <p className="text-dark-300">Update your personal information</p>
+          <p className="text-dark-300 text-sm sm:text-base">Update your personal information</p>
         </motion.div>
 
         {/* Form */}
@@ -115,8 +115,8 @@ export default function EditProfilePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <Card className="p-4 sm:p-6 lg:p-8">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Name */}
               <div>
                 <label className="block text-sm font-medium text-white mb-2">
@@ -126,7 +126,7 @@ export default function EditProfilePage() {
                   type="text"
                   placeholder="Your full name"
                   value={formData.name}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setFormData((prev) => ({ ...prev, name: e.target.value }))
                   }
                   required
@@ -163,7 +163,7 @@ export default function EditProfilePage() {
                   type="url"
                   placeholder="https://example.com/avatar.jpg"
                   value={formData.avatar}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setFormData((prev) => ({ ...prev, avatar: e.target.value }))
                   }
                 />

@@ -50,7 +50,7 @@ export default function ProgressUpdateModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Update Progress">
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Goal Info */}
         <div className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
@@ -78,7 +78,7 @@ export default function ProgressUpdateModal({
               max="100"
               step="5"
               value={progress}
-              onChange={(e) => setProgress(Number(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProgress(Number(e.target.value))}
               className="w-full h-2 bg-dark-700 rounded-lg appearance-none cursor-pointer slider"
               style={{
                 background: `linear-gradient(to right, #FF6B35 0%, #FF6B35 ${progress}%, #334155 ${progress}%, #334155 100%)`,

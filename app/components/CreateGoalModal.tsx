@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Modal, Button, Input, TextArea, Select } from "./ui";
+import { Modal, Button, Input, Select } from "./ui";
 import { Target, Calendar, Users, Lock } from "lucide-react";
 
 interface CreateGoalModalProps {
@@ -71,7 +71,7 @@ export default function CreateGoalModal({ isOpen, onClose, onSubmit }: CreateGoa
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Create New Goal">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* Goal Title */}
         <div>
           <label className="block text-sm font-medium text-white mb-2">
@@ -80,7 +80,7 @@ export default function CreateGoalModal({ isOpen, onClose, onSubmit }: CreateGoa
           <Input
             placeholder="What do you want to achieve?"
             value={formData.title}
-            onChange={(e) => handleChange("title", e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("title", e.target.value)}
             required
           />
         </div>
@@ -90,11 +90,13 @@ export default function CreateGoalModal({ isOpen, onClose, onSubmit }: CreateGoa
           <label className="block text-sm font-medium text-white mb-2">
             Description
           </label>
-          <TextArea
+          <textarea
             placeholder="Describe your goal in detail..."
             value={formData.description}
-            onChange={(e) => handleChange("description", e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange("description", e.target.value)}
             name="description"
+            rows={3}
+            className="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500 resize-none"
           />
         </div>
 
@@ -121,7 +123,7 @@ export default function CreateGoalModal({ isOpen, onClose, onSubmit }: CreateGoa
               <input
                 type="date"
                 value={formData.targetDate}
-                onChange={(e) => handleChange("targetDate", e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("targetDate", e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
               />
             </div>

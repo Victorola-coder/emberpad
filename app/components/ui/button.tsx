@@ -26,9 +26,9 @@ export default function Button(props: ButtonProps) {
           "px-6 py-3 text-lg": size === "lg",
           "bg-gradient-to-r from-ember-400 to-ember-500 rounded-[10px] text-white hover:from-ember-500 hover:to-ember-600":
             variant === "default",
-          "bg-white text-dark-900 rounded-[16px] hover:bg-dark-50":
+          "bg-dark-700 text-white rounded-[16px] hover:bg-dark-600 border border-dark-600":
             variant === "secondary",
-          "bg-danger-50 hover:bg-danger-100 text-danger-600 border border-danger-200":
+          "bg-danger-500 hover:bg-danger-600 text-white rounded-[12px] border border-danger-600":
             variant === "danger",
           "bg-ember-500 hover:bg-ember-600 rounded-[12px] active:bg-ember-700 text-white":
             variant === "primary",

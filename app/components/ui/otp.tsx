@@ -106,7 +106,7 @@ export default function OTP() {
             id={`otp-${index + 1}`}
             className="w-12 h-12 text-center bg-[#283142] p-4 rounded-[12px] text-white placeholder:text-[#FFFFFF80] font-aloeSemBold text-[24px] leading-[22.4px] focus:outline-none focus:ring-0"
             onPaste={index === 0 ? handleOtpPaste : undefined}
-            onChange={(e) => handleOtpChange(e, key)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOtpChange(e, key)}
             onKeyDown={(e) => {
               const currentIndex = parseInt(key.split("_")[1]) - 1;
 

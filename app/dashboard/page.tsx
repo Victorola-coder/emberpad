@@ -229,95 +229,97 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-4xl font-heading font-bold text-white mb-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white mb-2">
                 Your Goals Dashboard
               </h1>
-              <p className="text-dark-300">
+              <p className="text-dark-300 text-sm sm:text-base">
                 Track your progress and stay motivated with your community
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Button
                 variant="secondary"
+                size="sm"
                 onClick={() => setIsUserSearchOpen(true)}
                 className="flex items-center gap-2"
               >
                 <Search className="w-4 h-4" />
-                Find People
+                <span className="hidden sm:inline">Find People</span>
               </Button>
               <Button
                 variant="primary"
-                size="lg"
+                size="sm"
                 className="group"
                 onClick={() => setIsCreateModalOpen(true)}
               >
-                <Plus className="w-5 h-5 mr-2" />
-                Create Goal
+                <Plus className="w-4 sm:w-5 h-4 sm:h-5 sm:mr-2" />
+                <span className="hidden sm:inline">Create Goal</span>
+                <span className="sm:hidden">Create</span>
               </Button>
             </div>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
-                  <Target className="w-6 h-6 text-white" />
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8">
+            <Card className="p-4 sm:p-5 lg:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center flex-shrink-0">
+                  <Target className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <p className="text-2xl font-heading font-bold text-white">
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                     {goals.length}
                   </p>
-                  <p className="text-dark-400 text-sm">Active Goals</p>
+                  <p className="text-dark-400 text-xs sm:text-sm">Active Goals</p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-success-400 to-success-600 flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-white" />
+            <Card className="p-4 sm:p-5 lg:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-success-400 to-success-600 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <p className="text-2xl font-heading font-bold text-white">
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                     {Math.round(
                       goals.reduce((acc, goal) => acc + goal.progress, 0) /
                         goals.length
-                    )}
+                    ) || 0}
                     %
                   </p>
-                  <p className="text-dark-400 text-sm">Avg Progress</p>
+                  <p className="text-dark-400 text-xs sm:text-sm">Avg Progress</p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-ocean-400 to-ocean-600 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-white" />
+            <Card className="p-4 sm:p-5 lg:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-ocean-400 to-ocean-600 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <p className="text-2xl font-heading font-bold text-white">
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                     24
                   </p>
-                  <p className="text-dark-400 text-sm">Following</p>
+                  <p className="text-dark-400 text-xs sm:text-sm">Following</p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-sunshine-400 to-sunshine-600 flex items-center justify-center">
-                  <Bell className="w-6 h-6 text-white" />
+            <Card className="p-4 sm:p-5 lg:p-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-r from-sunshine-400 to-sunshine-600 flex items-center justify-center flex-shrink-0">
+                  <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <p className="text-2xl font-heading font-bold text-white">
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-heading font-bold text-white truncate">
                     3
                   </p>
-                  <p className="text-dark-400 text-sm">Reminders</p>
+                  <p className="text-dark-400 text-xs sm:text-sm">Reminders</p>
                 </div>
               </div>
             </Card>
@@ -352,27 +354,27 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Filters and Controls */}
+          {/* Filters and Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex items-center justify-between mb-8"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8"
         >
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Search className="w-5 h-5 text-dark-400" />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 flex-1">
+            <div className="relative flex-1 sm:max-w-xs">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-dark-400" />
               <input
                 type="text"
                 placeholder="Search goals..."
-                className="bg-dark-800 border border-dark-600 rounded-lg px-4 py-2 text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
+                className="w-full pl-10 pr-4 py-2.5 bg-dark-800 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
               />
             </div>
 
             <select
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="bg-dark-800 border border-dark-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilter(e.target.value)}
+              className="bg-dark-800 border border-dark-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-ember-500 focus:border-ember-500"
             >
               <option value="all">All Goals</option>
               <option value="my-goals">My Goals</option>
@@ -383,7 +385,7 @@ export default function Dashboard() {
             </select>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-end sm:justify-start">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-2 rounded-lg transition-colors ${
