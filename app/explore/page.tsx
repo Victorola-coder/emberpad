@@ -6,6 +6,7 @@ import { Button, Card } from "../components/ui";
 import GoalCard from "../components/GoalCard";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
+import Link from "next/link";
 import {
   Globe,
   TrendingUp,
@@ -40,23 +41,22 @@ export default function ExplorePage() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!authLoading && !user) {
-      window.location.href = "/auth/login";
-      return;
-    }
-  }, [user, authLoading]);
+  // No login required for explore page - it's public!
 
-  // Fetch all public goals
+  // Fetch all public goals (no auth required)
   useEffect(() => {
     const fetchPublicGoals = async () => {
       try {
         setLoading(true);
+        const token = localStorage.getItem("token");
+        const headers: HeadersInit = {};
+        
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+        }
+
         const response = await fetch("/api/goals/public", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers,
         });
 
         if (response.ok) {
@@ -72,13 +72,15 @@ export default function ExplorePage() {
       }
     };
 
-    if (user) {
-      fetchPublicGoals();
-    }
-  }, [user]);
+    fetchPublicGoals();
+  }, []);
 
   const handleSendReminder = async (goalId: string, toUserId: string) => {
-    if (!user) return;
+    if (!user) {
+      alert("Please sign in to send encouragement!");
+      window.location.href = "/auth/login";
+      return;
+    }
 
     try {
       const response = await fetch("/api/reminders", {
@@ -135,10 +137,10 @@ export default function ExplorePage() {
       );
     });
 
-  if (authLoading || loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
-        <Header />
+        {user && <Header />}
         <div className="max-w-6xl mx-auto p-8">
           <div className="animate-pulse space-y-8">
             <div className="h-8 bg-dark-700 rounded w-1/3"></div>
@@ -155,7 +157,29 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
-      <Header />
+      {user && <Header />}
+      {!user && (
+        <div className="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <Link href="/" className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
+                  <Target className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-heading font-bold text-white">Emberpad</span>
+              </Link>
+              <div className="flex items-center gap-2">
+                <Link href="/auth/login">
+                  <Button variant="secondary" size="sm">Sign In</Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button variant="primary" size="sm">Sign Up</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-6xl mx-auto p-8">
         {/* Header */}
         <motion.div

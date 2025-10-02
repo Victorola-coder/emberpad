@@ -59,6 +59,21 @@ export default function GoalCard({
     }
   };
 
+  const handleCommentClick = () => {
+    if (!currentUserId) {
+      if (confirm("You need to sign in to comment. Would you like to sign in now?")) {
+        window.location.href = "/auth/login";
+      }
+      return;
+    }
+    setShowCommentModal(true);
+  };
+
+  const handleShareClick = () => {
+    // Share doesn't require login
+    setShowShareModal(true);
+  };
+
   const getCategoryColor = (category: string) => {
     const colors = {
       health: "from-success-400 to-success-600",
@@ -208,7 +223,7 @@ export default function GoalCard({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setShowCommentModal(true)}
+              onClick={handleCommentClick}
               className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-xs sm:text-sm font-medium flex-1 sm:flex-initial"
             >
               <MessageCircle className="w-4 h-4 flex-shrink-0" />
@@ -217,7 +232,7 @@ export default function GoalCard({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setShowShareModal(true)}
+              onClick={handleShareClick}
               className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white rounded-lg transition-colors text-xs sm:text-sm font-medium flex-1 sm:flex-initial"
             >
               <Share className="w-4 h-4 flex-shrink-0" />
@@ -236,14 +251,16 @@ export default function GoalCard({
         onUpdate={handleProgressUpdate}
       />
 
-      <CommentModal
-        isOpen={showCommentModal}
-        onClose={() => setShowCommentModal(false)}
-        goalTitle={goal.title}
-        goalId={goal.id}
-        userId={currentUserId || ""}
-        goalOwnerId={goal.user.id}
-      />
+      {currentUserId && (
+        <CommentModal
+          isOpen={showCommentModal}
+          onClose={() => setShowCommentModal(false)}
+          goalTitle={goal.title}
+          goalId={goal.id}
+          userId={currentUserId}
+          goalOwnerId={goal.user.id}
+        />
+      )}
 
       <ShareModal
         isOpen={showShareModal}
