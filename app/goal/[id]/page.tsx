@@ -1,25 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Card, Button } from "../../components/ui";
-import { useAuth } from "../../contexts/AuthContext";
-import Link from "next/link";
 import {
   Target,
-  Calendar,
   Users,
-  TrendingUp,
   Heart,
-  MessageCircle,
   Share,
-  ArrowLeft,
   User,
   Lock,
   Globe,
   UserPlus,
+  ArrowLeft,
+  MessageCircle,
 } from "lucide-react";
-
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Card, Button } from "../../components/ui";
+import { useAuth } from "../../contexts/AuthContext";
 interface Goal {
   id: string;
   title: string;
@@ -37,12 +34,18 @@ interface Goal {
   createdAt: string;
 }
 
-export default function GoalPage({ params }: { params: { id: string } }) {
+export default function GoalPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { user } = useAuth();
   const [goal, setGoal] = useState<Goal | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
+  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(
+    null
+  );
 
   // Resolve params (Next.js 15 async params)
   useEffect(() => {
@@ -57,7 +60,7 @@ export default function GoalPage({ params }: { params: { id: string } }) {
         setLoading(true);
         const token = localStorage.getItem("token");
         const headers: HeadersInit = {};
-        
+
         if (token) {
           headers.Authorization = `Bearer ${token}`;
         }
@@ -92,7 +95,9 @@ export default function GoalPage({ params }: { params: { id: string } }) {
       finance: "from-warning-400 to-warning-600",
       creative: "from-danger-400 to-danger-600",
     };
-    return colors[category as keyof typeof colors] || "from-ember-400 to-ember-600";
+    return (
+      colors[category as keyof typeof colors] || "from-ember-400 to-ember-600"
+    );
   };
 
   const formatDate = (dateString: string) => {
@@ -105,7 +110,11 @@ export default function GoalPage({ params }: { params: { id: string } }) {
 
   const handleAction = (action: string) => {
     if (!user) {
-      if (confirm(`You need to sign in to ${action}. Would you like to sign in now?`)) {
+      if (
+        confirm(
+          `You need to sign in to ${action}. Would you like to sign in now?`
+        )
+      ) {
         window.location.href = "/auth/login";
       }
       return;
@@ -154,25 +163,35 @@ export default function GoalPage({ params }: { params: { id: string } }) {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-ember-400 to-ember-600 flex items-center justify-center">
                 <Target className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-heading font-bold text-white">Emberpad</span>
+              <span className="text-xl font-heading font-bold text-white">
+                Emberpad
+              </span>
             </Link>
             <div className="flex items-center gap-2">
               {user ? (
                 <>
                   <Link href="/dashboard">
-                    <Button variant="secondary" size="sm">Dashboard</Button>
+                    <Button variant="secondary" size="sm">
+                      Dashboard
+                    </Button>
                   </Link>
                   <Link href="/explore">
-                    <Button variant="secondary" size="sm">Explore</Button>
+                    <Button variant="secondary" size="sm">
+                      Explore
+                    </Button>
                   </Link>
                 </>
               ) : (
                 <>
                   <Link href="/auth/login">
-                    <Button variant="secondary" size="sm">Sign In</Button>
+                    <Button variant="secondary" size="sm">
+                      Sign In
+                    </Button>
                   </Link>
                   <Link href="/auth/signup">
-                    <Button variant="primary" size="sm">Sign Up</Button>
+                    <Button variant="primary" size="sm">
+                      Sign Up
+                    </Button>
                   </Link>
                 </>
               )}
@@ -239,7 +258,9 @@ export default function GoalPage({ params }: { params: { id: string } }) {
             {/* Progress Bar */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium text-dark-400">Progress</span>
+                <span className="text-sm font-medium text-dark-400">
+                  Progress
+                </span>
                 <span className="text-2xl font-heading font-bold text-white">
                   {goal.progress}%
                 </span>
@@ -260,16 +281,22 @@ export default function GoalPage({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 p-4 bg-dark-900/50 rounded-xl">
               <div>
                 <p className="text-xs text-dark-400 mb-1">Category</p>
-                <p className="text-sm font-medium text-white capitalize">{goal.category}</p>
+                <p className="text-sm font-medium text-white capitalize">
+                  {goal.category}
+                </p>
               </div>
               <div>
                 <p className="text-xs text-dark-400 mb-1">Status</p>
-                <p className="text-sm font-medium text-success-400 capitalize">{goal.status}</p>
+                <p className="text-sm font-medium text-success-400 capitalize">
+                  {goal.status}
+                </p>
               </div>
               {goal.targetDate && (
                 <div>
                   <p className="text-xs text-dark-400 mb-1">Target Date</p>
-                  <p className="text-sm font-medium text-white">{formatDate(goal.targetDate)}</p>
+                  <p className="text-sm font-medium text-white">
+                    {formatDate(goal.targetDate)}
+                  </p>
                 </div>
               )}
               <div>
@@ -282,7 +309,9 @@ export default function GoalPage({ params }: { params: { id: string } }) {
                   ) : (
                     <Lock className="w-3 h-3 text-white" />
                   )}
-                  <p className="text-sm font-medium text-white capitalize">{goal.privacy}</p>
+                  <p className="text-sm font-medium text-white capitalize">
+                    {goal.privacy}
+                  </p>
                 </div>
               </div>
             </div>
@@ -294,14 +323,14 @@ export default function GoalPage({ params }: { params: { id: string } }) {
                   <Button
                     variant="primary"
                     className="flex-1"
-                    onClick={() => window.location.href = "/auth/signup"}
+                    onClick={() => (window.location.href = "/auth/signup")}
                   >
                     <UserPlus className="w-4 h-4 mr-2" />
                     Sign Up to Interact
                   </Button>
                   <Button
                     variant="secondary"
-                    onClick={() => window.location.href = "/auth/login"}
+                    onClick={() => (window.location.href = "/auth/login")}
                   >
                     Sign In
                   </Button>
@@ -351,16 +380,25 @@ export default function GoalPage({ params }: { params: { id: string } }) {
                   Start Your Own Goal Journey
                 </h2>
                 <p className="text-dark-300 mb-6 text-sm sm:text-base">
-                  Join Emberpad to track your goals, connect with others, and achieve more together
+                  Join Emberpad to track your goals, connect with others, and
+                  achieve more together
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href="/auth/signup">
-                    <Button variant="primary" size="lg" className="w-full sm:w-auto">
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      className="w-full sm:w-auto"
+                    >
                       Get Started Free
                     </Button>
                   </Link>
                   <Link href="/explore">
-                    <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      className="w-full sm:w-auto"
+                    >
                       Explore More Goals
                     </Button>
                   </Link>
@@ -373,4 +411,3 @@ export default function GoalPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
